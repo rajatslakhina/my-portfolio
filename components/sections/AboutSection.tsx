@@ -3,6 +3,9 @@ import { PROFILE_SUMMARY } from "@/constants";
 import SectionWrapper from "../shared/SectionWrapper";
 import { CheckCircle } from "lucide-react";
 
+const formatMarkdownBold = (text: string) =>
+    text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
 const AboutSection = () => {
     return (
         <SectionWrapper id="about">
@@ -14,7 +17,10 @@ const AboutSection = () => {
                     </h1>
                     <div className="prose prose-invert max-w-none text-muted-foreground space-y-4 text-base leading-7">
                         {PROFILE_SUMMARY.description.map((text, index) => (
-                            <p key={index} dangerouslySetInnerHTML={{ __html: text }} />
+                            <p
+                                key={index}
+                                dangerouslySetInnerHTML={{ __html: formatMarkdownBold(text) }}
+                            />
                         ))}
                     </div>
                 </div>
