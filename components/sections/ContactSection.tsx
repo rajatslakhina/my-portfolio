@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, MapPin, Phone, MessageSquare, Send } from "lucide-react";
+import { Mail, MapPin, Phone, MessageSquare, Send, icons, Linkedin } from "lucide-react";
+import { FaMedium } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
 
 const contactLinks = [
@@ -28,6 +29,16 @@ const contactLinks = [
         label: "Location",
         value: CONTACT_DETAILS.location,
     },
+    {
+        icon: Linkedin,
+        label: "linkedIn",
+        value: CONTACT_DETAILS.linkedin,
+    },
+    {
+        icon: FaMedium,
+        label: "Medium",
+        value: CONTACT_DETAILS.medium,
+    }
 ];
 
 const ContactSection = () => {
@@ -85,7 +96,7 @@ const ContactSection = () => {
                 </div>
 
                 {/* Contact Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
+                {/* <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="name">Full Name</Label>
@@ -113,7 +124,7 @@ const ContactSection = () => {
                         <Send className="mr-2 h-4 w-4" />
                         Send Message
                     </Button>
-                </form>
+                </form> */}
             </div>
         </SectionWrapper>
     );

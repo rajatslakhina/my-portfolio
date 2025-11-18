@@ -407,4 +407,6 @@ export const CONTACT_DETAILS = {
   phone: SOCIAL_LINKS.phone,
   location: 'Gurugram, Haryana, India',
   whatsapp: SOCIAL_LINKS.whatsapp,
+  linkedin: SOCIAL_LINKS.linkedin,
+  medium: SOCIAL_LINKS.medium,
 };
