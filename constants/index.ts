@@ -44,7 +44,7 @@ export const NAV_LINKS = [
 export const SOCIAL_LINKS = {
   phone: '+91-9499109991',
   email: 'er.rajatlakhina@gmail.com',
-  linkedin: 'https://linkedin.com/in/rajat-lakhina',
+  linkedin: 'https://linkedin.com/in/rajat-lakhina-952785107/',
   medium: 'https://medium.com/@er.rajatlakhina',
   whatsapp: 'https://wa.me/919499109991',
 };
@@ -388,15 +388,15 @@ export const PROJECTS = [
 export const EDUCATION = [
   {
     degree: 'B.Tech, Computer Science & Engineering',
-    institution: 'Kurukshetra University, Kurukshetra',
-    duration: '2012 - 2016',
+    institution: 'N.C. College of Engineering, Israna, Panipat',
+    duration: '2013 - 2016',
     details:
       'Graduated with a focus on data structures, algorithms, and software engineering principles, laying the foundation for my career in development.',
   },
   {
     degree: 'Diploma, Computer Engineering',
-    institution: 'Govt. Polytechnic, Ambala City',
-    duration: '2009 - 2012',
+    institution: 'Govt. Polytechnic, Nilokheri, Karnal',
+    duration: '2010 - 2013',
     details:
       'Gained early hands-on experience and fundamental knowledge in computer hardware, networking, and programming.',
   },
