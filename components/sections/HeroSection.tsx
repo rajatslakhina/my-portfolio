@@ -33,7 +33,7 @@ const itemVariants = {
 const HeroSection = () => {
     return (
         <section className="flex min-h-[calc(100vh-5rem)] items-center py-24">
-            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+            <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-2">
                 {/* Left Content */}
                 <motion.div
                     className="flex flex-col items-center text-center lg:items-start lg:text-left"

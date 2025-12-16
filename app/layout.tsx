@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
+import DisableRightClick from "@/components/system/DisableRightClick";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/constants";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -92,6 +93,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <Header />
         <main className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <DisableRightClick />
           {children}
         </main>
         <Footer />
