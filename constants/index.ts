@@ -49,7 +49,7 @@ export const SOCIAL_LINKS = {
   whatsapp: 'https://wa.me/919499109991',
 };
 
-export const RESUME_URL = '/Rajat_Lakhina_Resume.pdf';
+export const RESUME_URL = '/RajatSLakhina_CV.pdf';
 
 export const PROFILE_SUMMARY = {
   title: 'About Me',
