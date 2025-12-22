@@ -59,7 +59,7 @@ const jsonLd = {
   "name": "Rajat S. Lakhina",
   "url": SITE_URL,
   "sameAs": [
-    "https://linkedin.com/in/rajat-lakhina",
+    "https://www.linkedin.com/in/rajat-s-lakhina-952785107/",
     "https://medium.com/@er.rajatlakhina"
   ],
   "jobTitle": "Mobile Development Professional",

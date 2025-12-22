@@ -44,7 +44,7 @@ export const NAV_LINKS = [
 export const SOCIAL_LINKS = {
   phone: '+91-9499109991',
   email: 'er.rajatlakhina@gmail.com',
-  linkedin: 'https://linkedin.com/in/rajat-lakhina-952785107/',
+  linkedin: 'https://www.linkedin.com/in/rajat-s-lakhina-952785107/',
   medium: 'https://medium.com/@er.rajatlakhina',
   whatsapp: 'https://wa.me/919499109991',
 };
