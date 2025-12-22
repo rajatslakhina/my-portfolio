@@ -56,7 +56,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": "Rajat Lakhina",
+  "name": "Rajat S. Lakhina",
   "url": SITE_URL,
   "sameAs": [
     "https://linkedin.com/in/rajat-lakhina",
