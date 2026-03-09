@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://your-domain.com/sitemap.xml
+Sitemap: https://rajatlakhina.com/sitemap.xml
