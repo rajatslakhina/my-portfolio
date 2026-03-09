@@ -10,18 +10,18 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Dot } from "lucide-react";
+import { Check } from "lucide-react";
 
 const ExperienceSection = () => {
     return (
         <SectionWrapper id="experience">
-            <h1 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Career Journey
-            </h1>
+            </h2>
 
             <Accordion type="single" collapsible className="w-full space-y-4">
-                {EXPERIENCE.map((exp, index) => (
-                    <AccordionItem key={index} value={`item-${index}`} className="rounded-lg border bg-card/50 shadow-sm">
+                {EXPERIENCE.map((exp) => (
+                    <AccordionItem key={exp.company} value={exp.company} className="rounded-lg border bg-card/50 shadow-sm">
                         <AccordionTrigger className="px-6 py-4 text-left hover:no-underline">
                             <div className="flex w-full flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
                                 <div className="flex-1">
@@ -37,16 +37,16 @@ const ExperienceSection = () => {
                             )}
 
                             <div className="space-y-4">
-                                {exp.achievements.map((ach, achIndex) => (
-                                    <Card key={achIndex} className="bg-background/50">
+                                {exp.achievements.map((ach) => (
+                                    <Card key={ach.company} className="bg-background/50" aria-label={`${ach.company} - ${ach.duration}`}>
                                         <CardHeader>
                                             <CardTitle className="text-base font-semibold">{ach.company}</CardTitle>
                                             <CardDescription>{ach.duration}</CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <ul className="space-y-2">
-                                                {ach.points.map((point, pIndex) => (
-                                                    <li key={pIndex} className="flex items-start">
+                                                {ach.points.map((point) => (
+                                                    <li key={point} className="flex items-start">
                                                         <Check className="mr-2 mt-1 h-4 w-4 flex-shrink-0 text-primary" />
                                                         <span className="text-sm text-muted-foreground">{point}</span>
                                                     </li>

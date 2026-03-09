@@ -23,35 +23,35 @@ const cardVariants = {
 const ProjectsSection = () => {
     return (
         <SectionWrapper id="projects">
-            <h1 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 My Work & Projects
-            </h1>
+            </h2>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {PROJECTS.map((project, index) => (
+                {PROJECTS.map((project) => (
                     <motion.div
-                        key={index}
+                        key={project.title}
                         variants={cardVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        transition={{ duration: 0.5 }}
                         className="h-full"
                     >
-                        <Card className="flex h-full flex-col justify-between bg-card/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+                        <Card className="flex h-full flex-col justify-between bg-card/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10" aria-label={`Project: ${project.title}`}>
                             <CardHeader>
                                 <CardTitle className="text-xl text-primary">{project.title}</CardTitle>
                                 <CardDescription className="pt-2">
-                                    <div className="flex flex-wrap gap-2">
-                                        {project.tags.map((tag, tagIndex) => (
+                                    <span className="flex flex-wrap gap-2">
+                                        {project.tags.map((tag) => (
                                             <span
-                                                key={tagIndex}
+                                                key={tag}
                                                 className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
                                             >
                                                 {tag}
                                             </span>
                                         ))}
-                                    </div>
+                                    </span>
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -60,7 +60,7 @@ const ProjectsSection = () => {
                             <CardFooter className="flex space-x-2">
                                 {project.link && (
                                     <Button variant="outline" asChild>
-                                        <a href={project.link} target="_blank" rel="noopener noreferrer">
+                                        <a href={project.link} target="_blank" rel="noopener noreferrer" aria-label={`View source code for ${project.title}`}>
                                             <Github className="mr-2 h-4 w-4" />
                                             Code
                                         </a>
@@ -68,7 +68,7 @@ const ProjectsSection = () => {
                                 )}
                                 {project.live && (
                                     <Button variant="secondary" asChild>
-                                        <a href={project.live} target="_blank" rel="noopener noreferrer">
+                                        <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label={`View live demo of ${project.title}`}>
                                             <ExternalLink className="mr-2 h-4 w-4" />
                                             Live
                                         </a>

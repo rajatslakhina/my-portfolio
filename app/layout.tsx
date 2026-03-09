@@ -4,8 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
-import DisableRightClick from "@/components/system/DisableRightClick";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/constants";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, SOCIAL_LINKS } from "@/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,9 +32,9 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     images: [
       {
-        url: `${SITE_URL}/og-image.png`, // Create and add an OG image to /public
-        width: 1200,
-        height: 630,
+        url: `${SITE_URL}/rajat-profile.webp`,
+        width: 400,
+        height: 400,
         alt: SITE_NAME,
       },
     ],
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
   },
 
   // Manifest
-  manifest: `${SITE_URL}/site.webmanifest`,
+  manifest: `${SITE_URL}/manifest.json`,
 };
 
 // JSON-LD Structured Data
@@ -59,16 +58,16 @@ const jsonLd = {
   "name": "Rajat S. Lakhina",
   "url": SITE_URL,
   "sameAs": [
-    "https://www.linkedin.com/in/rajat-s-lakhina-952785107/",
-    "https://medium.com/@er.rajatlakhina"
+    SOCIAL_LINKS.linkedin,
+    SOCIAL_LINKS.medium,
   ],
   "jobTitle": "Mobile Development Professional",
   "worksFor": {
     "@type": "Organization",
     "name": "ThoughtWorks"
   },
-  "email": "er.rajatlakhina@gmail.com",
-  "telephone": "+91-9499109991",
+  "email": SOCIAL_LINKS.email,
+  "telephone": SOCIAL_LINKS.phone,
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Gurugram",
@@ -93,7 +92,6 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <Header />
         <main className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <DisableRightClick />
           {children}
         </main>
         <Footer />

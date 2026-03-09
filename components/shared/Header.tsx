@@ -1,7 +1,7 @@
 // components/shared/Header.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion, useScroll } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,11 +15,14 @@ const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const { scrollY } = useScroll();
 
+    const handleScroll = useCallback((latest: number) => {
+        const isScrolled = latest > 50;
+        setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+    }, []);
+
     useEffect(() => {
-        return scrollY.on("change", (latest) => {
-            setScrolled(latest > 50);
-        });
-    }, [scrollY]);
+        return scrollY.on("change", handleScroll);
+    }, [scrollY, handleScroll]);
 
     return (
         <motion.header
@@ -41,8 +44,9 @@ const Header = () => {
                             <Link
                                 key={link.href}
                                 href={link.href}
+                                aria-current={pathname === link.href ? "page" : undefined}
                                 className={cn(
-                                    "relative text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+                                    "relative text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm",
                                     pathname === link.href && "text-primary",
                                     "after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:scale-x-0 after:bg-primary after:transition-transform after:duration-300",
                                     pathname === link.href ? "after:scale-x-100" : "hover:after:scale-x-100"

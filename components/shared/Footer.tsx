@@ -1,5 +1,5 @@
 // components/shared/Footer.tsx
-import { SOCIAL_LINKS, SITE_NAME } from "@/constants";
+import { SITE_NAME } from "@/constants";
 import SocialLinks from "./SocialLinks";
 
 const Footer = () => {

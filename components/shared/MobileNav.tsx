@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { NAV_LINKS } from "@/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,12 +25,8 @@ const MobileNav = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
                 <div className="flex h-full flex-col">
-                    <div className="flex items-center justify-between border-b pb-4">
+                    <div className="flex items-center border-b pb-4">
                         <Logo />
-                        <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-                            <X className="h-6 w-6" />
-                            <span className="sr-only">Close menu</span>
-                        </Button>
                     </div>
                     <nav className="mt-8 flex flex-col space-y-4">
                         {NAV_LINKS.map((link) => (
@@ -38,6 +34,7 @@ const MobileNav = () => {
                                 key={link.href}
                                 href={link.href}
                                 onClick={() => setIsOpen(false)}
+                                aria-current={pathname === link.href ? "page" : undefined}
                                 className={cn(
                                     "text-lg font-medium text-muted-foreground transition-colors hover:text-primary",
                                     pathname === link.href && "text-primary"

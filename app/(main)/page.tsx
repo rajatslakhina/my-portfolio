@@ -1,16 +1,12 @@
 import Link from "next/link";
-
-// 1. ShadCN UI Imports
-// NOTE: Ensure the path to your button component is correct.
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
-
-// 2. Section Component Imports
-// NOTE: You MUST create these files in components/sections/
 import HeroSection from "@/components/sections/HeroSection";
-import AboutSection from "@/components/sections/AboutSection";
-import SkillsSection from "@/components/sections/SkillsSection";
-import ProjectsSection from "@/components/sections/ProjectsSection";
 
+const AboutSection = dynamic(() => import("@/components/sections/AboutSection"));
+const SkillsSection = dynamic(() => import("@/components/sections/SkillsSection"));
+const ProjectsSection = dynamic(() => import("@/components/sections/ProjectsSection"));
 
 export default function HomePage() {
     return (
@@ -19,13 +15,19 @@ export default function HomePage() {
             <HeroSection />
 
             {/* About Preview */}
-            <AboutSection />
+            <Suspense>
+                <AboutSection />
+            </Suspense>
 
             {/* Skills Preview */}
-            <SkillsSection />
+            <Suspense>
+                <SkillsSection />
+            </Suspense>
 
             {/* Projects Preview */}
-            <ProjectsSection />
+            <Suspense>
+                <ProjectsSection />
+            </Suspense>
 
             {/* View All Projects Button */}
             <div className="mt-[-4rem] text-center mb-16">

@@ -3,9 +3,9 @@
 
 import { SKILLS } from "@/constants";
 import SectionWrapper from "../shared/SectionWrapper";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Code, Layers, Puzzle, Gauge, Settings, LucideIcon } from "lucide-react";
 
 const tabs = [
@@ -37,19 +37,27 @@ const fadeInAnimation = {
     }),
 };
 
+const noMotionAnimation = {
+    initial: { opacity: 1 },
+    animate: () => ({ opacity: 1 }),
+};
+
 const SkillsSection = () => {
+    const prefersReducedMotion = useReducedMotion();
+    const animation = prefersReducedMotion ? noMotionAnimation : fadeInAnimation;
+
     return (
         <SectionWrapper id="skills">
-            <h1 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 My Professional Toolkit
-            </h1>
+            </h2>
 
             <Tabs defaultValue="mobile" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                <TabsList className="grid h-auto w-full grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-5">
                     {tabs.map((tab) => (
                         <TabsTrigger key={tab.value} value={tab.value} className="text-xs sm:text-sm">
-                            <tab.icon className="mr-2 h-4 w-4" />
-                            {tab.label}
+                            <tab.icon className="mr-1.5 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" />
+                            <span className="truncate">{tab.label}</span>
                         </TabsTrigger>
                     ))}
                 </TabsList>
@@ -61,13 +69,13 @@ const SkillsSection = () => {
                                 (skill, index) => (
                                     <motion.div
                                         key={skill.name}
-                                        variants={fadeInAnimation}
+                                        variants={animation}
                                         initial="initial"
                                         whileInView="animate"
                                         viewport={{ once: true }}
                                         custom={index}
                                     >
-                                        <Card className="h-full transform-gpu bg-card/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1">
+                                        <Card className="h-full transform-gpu bg-card/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1" aria-label={`Skill: ${skill.name}`}>
                                             <CardContent className="flex flex-col items-center justify-center p-4 text-center">
                                                 <skill.icon className="mb-3 h-8 w-8 text-primary" />
                                                 <span className="text-sm font-medium text-foreground">

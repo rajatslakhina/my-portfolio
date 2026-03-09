@@ -1,7 +1,7 @@
 // components/shared/SocialLinks.tsx
 import { SOCIAL_LINKS } from "@/constants";
-import { Mail, Linkedin, FileText, Phone } from "lucide-react";
-import { FaMedium } from "react-icons/fa6";
+import { Mail, Linkedin, Phone } from "lucide-react";
+import { MediumIcon } from "@/components/icons";
 import { Button } from "../ui/button";
 
 const links = [
@@ -12,7 +12,7 @@ const links = [
     },
     {
         href: SOCIAL_LINKS.medium,
-        icon: <FaMedium className="h-5 w-5" />,
+        icon: <MediumIcon className="h-5 w-5" />,
         label: "Medium"
     },
     {

@@ -21,14 +21,13 @@ import {
   Server,
   Cloud,
   BarChart,
-  ListVideo,
 } from 'lucide-react';
 
 export const SITE_NAME = 'Rajat Lakhina';
 export const SITE_TITLE = 'Rajat Lakhina | Mobile Development Professional';
 export const SITE_DESCRIPTION =
   'Nearly 10 years of experience in mobile development, specializing in iOS, SwiftUI, and mobile architecture. Senior Consultant at ThoughtWorks.';
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'; // Replace with your domain
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
 export const NAV_LINKS = [
   { name: 'Home', href: '/' },
@@ -82,9 +81,6 @@ export const SKILLS = {
     { name: 'CoreData', icon: Database },
     { name: 'CoreLocation', icon: Globe },
     { name: 'CoreAnimation', icon: Move },
-    /*     { name: "ARKit", icon: Puzzle }, */
-    /*     { name: "RealityKit", icon: Puzzle } */
-    ,
   ],
   architecturePatterns: [
     { name: 'MVVM', icon: Layers },
@@ -98,7 +94,7 @@ export const SKILLS = {
   ],
   developmentPractices: [
     { name: 'Agile/Scrum', icon: Gauge },
-    { name: 'TDD/BDD', icon: Settings }, // <-- This line was fixed (was name:A)
+    { name: 'TDD/BDD', icon: Settings },
     { name: 'DevOps', icon: GitPullRequest },
     { name: 'CI/CD', icon: GitPullRequest },
     { name: 'Stakeholder Alignment', icon: Megaphone },

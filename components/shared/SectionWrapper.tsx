@@ -1,7 +1,7 @@
 // components/shared/SectionWrapper.tsx
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const SectionWrapper = ({
@@ -13,11 +13,13 @@ const SectionWrapper = ({
     className?: string;
     id?: string;
 }) => {
+    const prefersReducedMotion = useReducedMotion();
+
     return (
         <motion.section
             id={id}
             className={cn("py-20 sm:py-24", className)}
-            initial={{ opacity: 0, y: 20 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
