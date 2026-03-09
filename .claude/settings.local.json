@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat \"app/\\(main\\)/page.tsx\")",
+      "Bash(cat app/\\\\\\(main\\\\\\)/page.tsx)",
+      "Bash(cat constants.ts 2>/dev/null || cat constants/index.ts 2>/dev/null || find . -name \"constants*\" -type f | grep -v node_modules | head -5)",
+      "Bash(cat app/\\\\\\(main\\\\\\)/about/page.tsx)",
+      "Bash(du -sh public/*)",
+      "Bash(cat app/\\\\\\(main\\\\\\)/contact/page.tsx)",
+      "Bash(cat app/\\\\\\(main\\\\\\)/projects/page.tsx)",
+      "Bash(cat \"app/\\(main\\)/projects/page.tsx\")",
+      "Bash(cat app/\\\\\\(main\\\\\\)/skills/page.tsx)",
+      "Bash(cat \"app/\\(main\\)/skills/page.tsx\")",
+      "Bash(cat \"app/\\(main\\)/about/page.tsx\" && cat \"app/\\(main\\)/education/page.tsx\")",
+      "Bash(grep -r \"NEXT_PUBLIC\" . --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" 2>/dev/null | grep -v node_modules | head -20)",
+      "Bash(grep -r \"process.env\" . --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" 2>/dev/null | grep -v node_modules)",
+      "Bash(wc -l components/**/*.tsx)",
+      "Bash(cat app/\\\\\\(main\\\\\\)/experience/page.tsx)",
+      "Bash(grep -r \"dangerouslySetInnerHTML\" components/ app/ --include=\"*.tsx\" 2>/dev/null | head -10)",
+      "Bash(cat app/\\\\\\(main\\\\\\)/education/page.tsx)",
+      "Bash(grep -r \"innerHTML\\\\|insertAdjacentHTML\\\\|outerHTML\" . --include=\"*.ts\" --include=\"*.tsx\" 2>/dev/null | grep -v node_modules)",
+      "Bash(grep -r \"useState\\\\|useEffect\" components/ app/ --include=\"*.tsx\" 2>/dev/null | grep -v node_modules)",
+      "Bash(grep -r \"role=\" components/ app/ --include=\"*.tsx\" 2>/dev/null | head -20)",
+      "Bash(npm audit 2>&1 | head -100)",
+      "Bash(grep -n \"framer-motion\\\\|motion\\\\.\" components/ app/ --include=\"*.tsx\" --recursive 2>/dev/null | head -30)",
+      "Bash(grep -r \"style=\" app components --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | grep -v node_modules | head -20)",
+      "Bash(grep -r \"dangerouslySetInnerHTML\" app components --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | grep -v node_modules)",
+      "Bash(grep -r \"ErrorBoundary\\\\|error.tsx\\\\|Error\" app --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | head -20)",
+      "Bash(npm list 2>/dev/null | grep -E \"react-icons|framer-motion|lucide\" | head -10)",
+      "Bash(grep -r \"https:\\\\/\\\\/\\\\|mailto:\" app components --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | grep -v node_modules | grep -v \"SITE_URL\\\\|SOCIAL_LINKS\\\\|CONTACT_DETAILS\\\\|RESUME_URL\\\\|\\\\.href\\\\|\\\\.whatsapp\\\\|\\\\.medium\\\\|\\\\.linkedin\" | head -30)",
+      "Bash(grep -rn \"index\" app components --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | grep -E \"key=|map\\\\\\(\" | head -20)",
+      "Bash(grep -rn \"interface\\\\|type.*Props\\\\|type.*{\" app components --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | grep -v node_modules | grep -v \"React\" | head -40)",
+      "Bash(grep -r \"rel=\\\\\"\" app components --include=\"*.tsx\" 2>/dev/null | grep -v \"noopener noreferrer\" | head -10)",
+      "Bash(grep -r \"password\\\\|secret\\\\|key\\\\|api\" . --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" 2>/dev/null | grep -v node_modules | grep -v \".next\")",
+      "Bash(cat -n app/\\\\\\(main\\\\\\)/page.tsx)",
+      "Bash(node -e \"const icons = require\\('lucide-react'\\); console.log\\(Object.keys\\(icons\\).filter\\(k => k.toLowerCase\\(\\).includes\\('message'\\) || k.toLowerCase\\(\\).includes\\('book'\\) || k.toLowerCase\\(\\).includes\\('pen'\\)\\)\\)\" 2>/dev/null || echo \"Checking lucide for Medium/WhatsApp alternatives...\")",
+      "Bash(pwd | xxd | head -10)"
+    ]
+  }
+}
