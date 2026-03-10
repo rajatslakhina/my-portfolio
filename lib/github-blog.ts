@@ -66,13 +66,15 @@ async function fetchPostsFromRepo(
           date:        data.date        ?? new Date().toISOString().split("T")[0],
           description: data.description
             ?? content
+              .split(/\n-{3,}\n/)[0]          // stop at first --- separator
               .split("\n")
-              .filter((l) => l.trim() && !l.startsWith("#"))
+              .filter((l) => l.trim() && !l.startsWith("#") && !/^-{3,}$/.test(l.trim()))
               .join(" ")
               .replace(/article\s*\d+[:\s_-]+/gi, "")
-              .replace(/[*>]/g, "")
+              .replace(/[*>`#]/g, "")
+              .replace(/\s+/g, " ")
               .trim()
-              .slice(0, 180),
+              .slice(0, 160),
           tags:        Array.isArray(data.tags) ? data.tags : [],
           content,
           coverImage:  data.coverImage ?? data.cover ?? undefined,
@@ -130,13 +132,15 @@ export async function getBlogPost(
       date:        data.date        ?? new Date().toISOString().split("T")[0],
       description: data.description
             ?? content
+              .split(/\n-{3,}\n/)[0]          // stop at first --- separator
               .split("\n")
-              .filter((l) => l.trim() && !l.startsWith("#"))
+              .filter((l) => l.trim() && !l.startsWith("#") && !/^-{3,}$/.test(l.trim()))
               .join(" ")
               .replace(/article\s*\d+[:\s_-]+/gi, "")
-              .replace(/[*>]/g, "")
+              .replace(/[*>`#]/g, "")
+              .replace(/\s+/g, " ")
               .trim()
-              .slice(0, 180),
+              .slice(0, 160),
       tags:        Array.isArray(data.tags) ? data.tags : [],
       content,
       coverImage:  data.coverImage ?? data.cover ?? undefined,

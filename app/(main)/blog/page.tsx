@@ -100,17 +100,17 @@ export default async function BlogPage() {
                         {post.description}
                       </p>
                       <div className="flex items-center justify-between">
-                        <div className="flex gap-3">
-                          <span className="flex items-center gap-1 font-mono-accent text-[10px] text-muted-foreground">
-                            <Calendar className="h-2.5 w-2.5" />
-                            {new Date(post.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-                          </span>
+                        <span className="flex items-center gap-1 font-mono-accent text-[10px] text-muted-foreground">
+                          <Calendar className="h-2.5 w-2.5" />
+                          {new Date(post.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                        </span>
+                        <div className="flex items-center gap-2">
                           <span className="flex items-center gap-1 font-mono-accent text-[10px] text-muted-foreground">
                             <Clock className="h-2.5 w-2.5" />
-                            {post.readingTime}m
+                            {post.readingTime} min
                           </span>
+                          <ArrowRight className="h-3.5 w-3.5 text-primary opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100" />
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-primary opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100" />
                       </div>
                     </div>
                   </Link>
