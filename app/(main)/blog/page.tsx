@@ -6,6 +6,8 @@ import { getBlogPostsByCategory } from "@/lib/github-blog";
 import { CyberBadge } from "@/components/ui/cyber-badge";
 import { Calendar, Clock, ArrowRight, BookOpen, ExternalLink } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Blog",
   description: "Technical articles on AI, mobile development, iOS and software engineering.",

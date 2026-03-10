@@ -15,7 +15,9 @@ const GRADIENTS = [
   "from-primary/6  via-secondary/4 to-transparent",
 ];
 
-const ProjectsSection = () => {
+interface ProjectsSectionProps { limit?: number; }
+
+const ProjectsSection = ({ limit }: ProjectsSectionProps) => {
   const reduced = useReducedMotion();
 
   return (
@@ -36,7 +38,7 @@ const ProjectsSection = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        {PROJECTS.map((project, i) => (
+        {(limit ? PROJECTS.slice(0, limit) : PROJECTS).map((project, i) => (
           <motion.div
             key={project.title}
             variants={reduced ? undefined : { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22,1,0.36,1] } } }}

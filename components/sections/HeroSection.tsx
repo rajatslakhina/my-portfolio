@@ -110,7 +110,7 @@ const HeroSection = () => {
             </Button>
             <Button
               asChild variant="ghost" size="lg"
-              className="text-muted-foreground hover:text-foreground hover:bg-white/5"
+              className="min-w-[9rem] text-muted-foreground hover:text-foreground hover:bg-white/5"
             >
               <Link href="/contact">
                 <Send className="mr-2 h-4 w-4" />
@@ -169,7 +169,7 @@ const HeroSection = () => {
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute -left-4 top-1/4 rounded-xl border border-primary/20 bg-card/80 px-3 py-2 backdrop-blur-md lg:-left-16"
                 >
-                  <p className="font-mono-accent text-xl font-black text-primary">9+</p>
+                  <p className="font-mono-accent text-xl font-black text-primary">10+</p>
                   <p className="font-mono-accent text-xs text-muted-foreground">Years Exp</p>
                 </motion.div>
                 <motion.div

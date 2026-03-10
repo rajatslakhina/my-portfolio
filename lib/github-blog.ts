@@ -25,6 +25,17 @@ function calcReadingTime(text: string) {
   return Math.max(1, Math.ceil(text.split(/\s+/).length / 200));
 }
 
+function cleanTitle(raw: string, isSlug = false): string {
+  let s = raw;
+  // Strip "Article 1:", "Article 01 -", "article_01_" prefixes (case-insensitive)
+  s = s.replace(/^article[\s_-]*\d+[:\s_-]+/i, "");
+  if (isSlug) {
+    s = s.replace(/[-_]/g, " ");
+  }
+  // Title-case
+  return s.trim().replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 interface GithubFile { name: string; type: string; download_url: string; }
 
 async function fetchPostsFromRepo(
@@ -35,7 +46,7 @@ async function fetchPostsFromRepo(
   try {
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents`,
-      { headers: BASE_HEADERS(TOKEN), next: { revalidate: 3600 } }
+      { headers: BASE_HEADERS(TOKEN), cache: 'no-store' }
     );
     if (!res.ok) return [];
 
@@ -46,14 +57,22 @@ async function fetchPostsFromRepo(
 
     const posts = await Promise.all(
       mdFiles.map(async (file) => {
-        const raw = await fetch(file.download_url, { next: { revalidate: 3600 } }).then((r) => r.text());
+        const raw = await fetch(file.download_url, { cache: 'no-store' }).then((r) => r.text());
         const { data, content } = matter(raw);
         const slug = file.name.replace(/\.md$/, "");
         return {
           slug,
-          title:       data.title       ?? slug.replace(/[-_]/g, " "),
+          title:       cleanTitle(data.title ?? slug, !data.title),
           date:        data.date        ?? new Date().toISOString().split("T")[0],
-          description: data.description ?? content.slice(0, 180).replace(/[#>\n*]/g, " ").trim(),
+          description: data.description
+            ?? content
+              .split("\n")
+              .filter((l) => l.trim() && !l.startsWith("#"))
+              .join(" ")
+              .replace(/article\s*\d+[:\s_-]+/gi, "")
+              .replace(/[*>]/g, "")
+              .trim()
+              .slice(0, 180),
           tags:        Array.isArray(data.tags) ? data.tags : [],
           content,
           coverImage:  data.coverImage ?? data.cover ?? undefined,
@@ -97,19 +116,27 @@ export async function getBlogPost(
     const { owner, repo } = category;
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${slug}.md`,
-      { headers: BASE_HEADERS(TOKEN), next: { revalidate: 3600 } }
+      { headers: BASE_HEADERS(TOKEN), cache: 'no-store' }
     );
     if (!res.ok) return null;
 
     const file = (await res.json()) as GithubFile;
-    const raw  = await fetch(file.download_url, { next: { revalidate: 3600 } }).then((r) => r.text());
+    const raw  = await fetch(file.download_url, { cache: 'no-store' }).then((r) => r.text());
     const { data, content } = matter(raw);
 
     return {
       slug,
-      title:       data.title       ?? slug.replace(/[-_]/g, " "),
+      title:       cleanTitle(data.title ?? slug, !data.title),
       date:        data.date        ?? new Date().toISOString().split("T")[0],
-      description: data.description ?? content.slice(0, 180).replace(/[#>\n*]/g, " ").trim(),
+      description: data.description
+            ?? content
+              .split("\n")
+              .filter((l) => l.trim() && !l.startsWith("#"))
+              .join(" ")
+              .replace(/article\s*\d+[:\s_-]+/gi, "")
+              .replace(/[*>]/g, "")
+              .trim()
+              .slice(0, 180),
       tags:        Array.isArray(data.tags) ? data.tags : [],
       content,
       coverImage:  data.coverImage ?? data.cover ?? undefined,

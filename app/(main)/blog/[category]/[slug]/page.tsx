@@ -1,4 +1,5 @@
 // app/(main)/blog/[category]/[slug]/page.tsx
+import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -9,6 +10,8 @@ import { Calendar, Clock, ArrowLeft, ExternalLink } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
+
+export const dynamic = 'force-dynamic';
 
 interface PageProps { params: { category: string; slug: string } }
 
@@ -24,19 +27,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export async function generateStaticParams() {
-  const params: { category: string; slug: string }[] = [];
-  for (const cat of BLOG_CATEGORIES) {
-    const posts = await getBlogPostsByCategory(cat);
-    for (const post of posts) {
-      params.push({ category: cat.slug, slug: post.slug });
-    }
-  }
-  return params;
-}
 
 const mdComponents: Components = {
-  h1: ({ children }) => <h1 className="mb-4 mt-10 text-3xl font-extrabold text-foreground first:mt-0">{children}</h1>,
+  h1: ({ children }) => {
+    const cleaned = React.Children.map(children, (child) =>
+      typeof child === "string" ? child.replace(/^article\s*\d+[:\s_-]+/i, "") : child
+    );
+    return <h1 className="mb-4 mt-10 text-3xl font-extrabold text-foreground first:mt-0">{cleaned}</h1>;
+  },
   h2: ({ children }) => <h2 className="mb-3 mt-8 text-2xl font-bold text-foreground">{children}</h2>,
   h3: ({ children }) => <h3 className="mb-2 mt-6 text-xl font-semibold text-foreground">{children}</h3>,
   p:  ({ children }) => <p className="mb-4 leading-7 text-muted-foreground">{children}</p>,

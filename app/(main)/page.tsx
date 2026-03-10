@@ -9,6 +9,7 @@ const AboutSection    = dynamic(() => import("@/components/sections/AboutSection
 const SkillsSection   = dynamic(() => import("@/components/sections/SkillsSection"));
 const ProjectsSection = dynamic(() => import("@/components/sections/ProjectsSection"));
 
+
 export default function HomePage() {
   return (
     <>
@@ -23,12 +24,12 @@ export default function HomePage() {
       </Suspense>
 
       <Suspense fallback={null}>
-        <ProjectsSection />
+        <ProjectsSection limit={2} />
       </Suspense>
 
       <div className="mb-10 text-center">
         <Button asChild variant="outline"
-          className="border-primary/30 hover:border-primary hover:bg-primary/10 hover:shadow-neon-primary transition-all duration-300">
+          className="min-w-[14rem] border-primary/30 hover:border-primary hover:bg-primary/10 hover:shadow-neon-primary transition-all duration-300">
           <Link href="/projects">View All Projects</Link>
         </Button>
       </div>
