@@ -36,6 +36,7 @@ export const NAV_LINKS = [
   { name: 'Experience', href: '/experience' },
   { name: 'Projects', href: '/projects' },
   { name: 'Education', href: '/education' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
 ];
 
@@ -48,6 +49,30 @@ export const SOCIAL_LINKS = {
 };
 
 export const RESUME_URL = '/RajatSLakhina_CV.pdf';
+export const BLOG_CATEGORIES = [
+  {
+    slug:        "ai",
+    label:       "AI & Machine Learning",
+    description: "Exploring artificial intelligence, large language models, and practical AI applications.",
+    owner:       "rajatslakhina",
+    repo:        "AI-Knowledge",
+    color:       "primary",   // maps to hsl(var(--primary))
+    emoji:       "🤖",
+  },
+  // Add more categories here, e.g.:
+  // {
+  //   slug:  "ios",
+  //   label: "iOS Development",
+  //   description: "Deep dives into Swift, SwiftUI, and iOS architecture.",
+  //   owner: "your-username",
+  //   repo:  "ios-blog",
+  //   color: "secondary",
+  //   emoji: "📱",
+  // },
+] as const;
+
+export type BlogCategory = typeof BLOG_CATEGORIES[number];
+
 
 export const PROFILE_SUMMARY = {
   title: 'About Me',

@@ -1,33 +1,30 @@
 // components/shared/SectionWrapper.tsx
 "use client";
-
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const SectionWrapper = ({
-    children,
-    className,
-    id,
-}: {
-    children: ReactNode;
-    className?: string;
-    id?: string;
-}) => {
-    const prefersReducedMotion = useReducedMotion();
+interface SectionWrapperProps {
+  children: ReactNode;
+  className?: string;
+  id?: string;
+}
 
-    return (
-        <motion.section
-            id={id}
-            className={cn("py-20 sm:py-24", className)}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-        >
-            {children}
-        </motion.section>
-    );
+const SectionWrapper = ({ children, className, id }: SectionWrapperProps) => {
+  const reduced = useReducedMotion();
+
+  return (
+    <motion.section
+      id={id}
+      className={cn("py-24 sm:py-32", className)}
+      initial={reduced ? false : { opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.section>
+  );
 };
 
 export default SectionWrapper;
