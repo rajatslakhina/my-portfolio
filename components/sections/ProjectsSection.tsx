@@ -4,9 +4,7 @@
 import { PROJECTS } from "@/constants";
 import SectionWrapper from "../shared/SectionWrapper";
 import {
-    Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -17,23 +15,23 @@ import { motion } from "framer-motion";
 
 const containerVariants = {
     hidden: {},
-    visible: {
-        transition: {
-            staggerChildren: 0.12,
-        },
-    },
+    visible: { transition: { staggerChildren: 0.12 } },
 };
 
 const cardVariants = {
     hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 0.61, 0.36, 1] } },
 };
 
 const ProjectsSection = () => {
     return (
         <SectionWrapper id="projects">
-            <h2 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                My Work & Projects
+            <p className="mb-3 text-center text-sm font-semibold uppercase tracking-widest text-primary">
+                What I&apos;ve Built
+            </p>
+            <h2 className="mb-12 text-center text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+                My Work &amp;{" "}
+                <span className="text-gradient font-serif italic">Projects</span>
             </h2>
 
             <motion.div
@@ -47,46 +45,55 @@ const ProjectsSection = () => {
                     <motion.div
                         key={project.title}
                         variants={cardVariants}
-                        className="h-full"
+                        className="group relative h-full overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow-card"
+                        aria-label={`Project: ${project.title}`}
                     >
-                        <Card className="flex h-full flex-col justify-between bg-card/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10" aria-label={`Project: ${project.title}`}>
-                            <CardHeader>
-                                <CardTitle className="text-xl text-primary">{project.title}</CardTitle>
-                                <CardDescription className="pt-2">
-                                    <span className="flex flex-wrap gap-2">
-                                        {project.tags.map((tag) => (
-                                            <span
-                                                key={tag}
-                                                className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
+                        {/* Shine overlay on hover */}
+                        <div className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-12deg] bg-gradient-to-r from-transparent via-white/5 to-transparent transition-none group-hover:animate-shine" />
+
+                        <CardHeader>
+                            <CardTitle className="text-xl text-gradient">{project.title}</CardTitle>
+                            <div className="flex flex-wrap gap-2 pt-2">
+                                {project.tags.map((tag) => (
+                                    <span
+                                        key={tag}
+                                        className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                                    >
+                                        {tag}
                                     </span>
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground">{project.description}</p>
-                            </CardContent>
-                            <CardFooter className="flex space-x-2">
-                                {project.link && (
-                                    <Button variant="outline" asChild>
-                                        <a href={project.link} target="_blank" rel="noopener noreferrer" aria-label={`View source code for ${project.title}`}>
-                                            <Github className="mr-2 h-4 w-4" />
-                                            Code
-                                        </a>
-                                    </Button>
-                                )}
-                                {project.live && (
-                                    <Button variant="secondary" asChild>
-                                        <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label={`View live demo of ${project.title}`}>
-                                            <ExternalLink className="mr-2 h-4 w-4" />
-                                            Live
-                                        </a>
-                                    </Button>
-                                )}
-                            </CardFooter>
-                        </Card>
+                                ))}
+                            </div>
+                        </CardHeader>
+
+                        <CardContent>
+                            <p className="text-sm text-muted-foreground">{project.description}</p>
+                        </CardContent>
+
+                        <CardFooter className="flex space-x-2">
+                            {project.link && (
+                                <Button
+                                    variant="outline"
+                                    asChild
+                                    className="border-border hover:border-primary hover:bg-primary/10"
+                                >
+                                    <a href={project.link} target="_blank" rel="noopener noreferrer" aria-label={`View source code for ${project.title}`}>
+                                        <Github className="mr-2 h-4 w-4" />
+                                        Code
+                                    </a>
+                                </Button>
+                            )}
+                            {project.live && (
+                                <Button
+                                    asChild
+                                    className="bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90"
+                                >
+                                    <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label={`View live demo of ${project.title}`}>
+                                        <ExternalLink className="mr-2 h-4 w-4" />
+                                        Live
+                                    </a>
+                                </Button>
+                            )}
+                        </CardFooter>
                     </motion.div>
                 ))}
             </motion.div>

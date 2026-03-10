@@ -2,7 +2,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { motion, useScroll } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS } from "@/constants";
@@ -13,57 +12,62 @@ import MobileNav from "./MobileNav";
 const Header = () => {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
-    const { scrollY } = useScroll();
 
-    const handleScroll = useCallback((latest: number) => {
-        const isScrolled = latest > 50;
-        setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+    const handleScroll = useCallback(() => {
+        setScrolled(window.scrollY > 50);
     }, []);
 
     useEffect(() => {
-        return scrollY.on("change", handleScroll);
-    }, [scrollY, handleScroll]);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [handleScroll]);
 
     return (
-        <motion.header
+        <header
             className={cn(
                 "sticky top-0 z-50 w-full transition-all duration-300",
                 scrolled
-                    ? "bg-background/80 backdrop-blur-lg shadow-md"
+                    ? "bg-background/80 backdrop-blur-lg shadow-[0_1px_0_hsl(var(--border))]"
                     : "bg-transparent"
             )}
         >
             <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-20 items-center justify-between">
-                    {/* Logo */}
                     <Logo />
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex md:items-center md:space-x-8">
-                        {NAV_LINKS.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                aria-current={pathname === link.href ? "page" : undefined}
-                                className={cn(
-                                    "relative text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm",
-                                    pathname === link.href && "text-primary",
-                                    "after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:scale-x-0 after:bg-primary after:transition-transform after:duration-300",
-                                    pathname === link.href ? "after:scale-x-100" : "hover:after:scale-x-100"
-                                )}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
+                    <nav aria-label="Main navigation" className="hidden md:flex md:items-center md:space-x-8">
+                        {NAV_LINKS.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    aria-current={isActive ? "page" : undefined}
+                                    className={cn(
+                                        "relative text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm",
+                                        isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                                    )}
+                                >
+                                    {link.name}
+                                    {/* Gradient underline */}
+                                    <span
+                                        className={cn(
+                                            "absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-gradient-to-r from-primary to-secondary transition-transform duration-300 origin-left",
+                                            isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                                        )}
+                                    />
+                                </Link>
+                            );
+                        })}
                     </nav>
 
-                    {/* Mobile Navigation */}
                     <div className="md:hidden">
                         <MobileNav />
                     </div>
                 </div>
             </div>
-        </motion.header>
+        </header>
     );
 };
 

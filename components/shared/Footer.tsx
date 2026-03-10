@@ -4,15 +4,16 @@ import SocialLinks from "./SocialLinks";
 
 const Footer = () => {
     return (
-        <footer className="border-t border-border mt-24 py-12">
-            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col items-center justify-between md:flex-row">
+        <footer className="mt-24 border-t border-border">
+            {/* Gradient top line */}
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            <div className="container mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+                <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                     <p className="text-sm text-muted-foreground">
-                        &copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
+                        &copy; {new Date().getFullYear()}{" "}
+                        <span className="text-gradient font-semibold">{SITE_NAME}</span>. All rights reserved.
                     </p>
-                    <div className="mt-4 md:mt-0">
-                        <SocialLinks />
-                    </div>
+                    <SocialLinks />
                 </div>
             </div>
         </footer>

@@ -1,12 +1,17 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, SOCIAL_LINKS } from "@/constants";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  style: ["normal", "italic"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -21,8 +26,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
-
-  // Open Graph
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -30,42 +33,24 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: SITE_NAME,
-    images: [
-      {
-        url: `${SITE_URL}/rajat-profile.webp`,
-        width: 400,
-        height: 400,
-        alt: SITE_NAME,
-      },
-    ],
+    images: [{ url: `${SITE_URL}/rajat-profile.webp`, width: 400, height: 400, alt: SITE_NAME }],
   },
-
-  // Icons
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
     apple: "/apple-touch-icon.svg",
   },
-
-  // Manifest
   manifest: `${SITE_URL}/manifest.json`,
 };
 
-// JSON-LD Structured Data
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Rajat S. Lakhina",
   "url": SITE_URL,
-  "sameAs": [
-    SOCIAL_LINKS.linkedin,
-    SOCIAL_LINKS.medium,
-  ],
+  "sameAs": [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.medium],
   "jobTitle": "Mobile Development Professional",
-  "worksFor": {
-    "@type": "Organization",
-    "name": "ThoughtWorks"
-  },
+  "worksFor": { "@type": "Organization", "name": "ThoughtWorks" },
   "email": SOCIAL_LINKS.email,
   "telephone": SOCIAL_LINKS.phone,
   "address": {
@@ -78,9 +63,7 @@ const jsonLd = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
       <head>
@@ -89,7 +72,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} ${inter.className} antialiased`}>
         <Header />
         <main className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {children}
