@@ -25,6 +25,11 @@ function calcReadingTime(text: string) {
   return Math.max(1, Math.ceil(text.split(/\s+/).length / 200));
 }
 
+function extractH1(content: string): string | null {
+  const match = content.match(/^#\s+(.+)$/m);
+  return match ? match[1].trim() : null;
+}
+
 function cleanTitle(raw: string, isSlug = false): string {
   let s = raw;
   // Strip "Article 1:", "Article 01 -", "article_01_" prefixes (case-insensitive)
@@ -33,7 +38,7 @@ function cleanTitle(raw: string, isSlug = false): string {
     s = s.replace(/[-_]/g, " ");
   }
   // Title-case
-  return s.trim().replace(/\b\w/g, (c) => c.toUpperCase());
+  return s.trim().replace(/(?<!')\b\w/g, (c) => c.toUpperCase());
 }
 
 interface GithubFile { name: string; type: string; download_url: string; }
@@ -62,7 +67,7 @@ async function fetchPostsFromRepo(
         const slug = file.name.replace(/\.md$/, "");
         return {
           slug,
-          title:       cleanTitle(data.title ?? slug, !data.title),
+          title:       cleanTitle(data.title ?? extractH1(content) ?? slug, !(data.title ?? extractH1(content))),
           date:        data.date        ?? new Date().toISOString().split("T")[0],
           description: data.description
             ?? content
@@ -128,7 +133,7 @@ export async function getBlogPost(
 
     return {
       slug,
-      title:       cleanTitle(data.title ?? slug, !data.title),
+      title:       cleanTitle(data.title ?? extractH1(content) ?? slug, !(data.title ?? extractH1(content))),
       date:        data.date        ?? new Date().toISOString().split("T")[0],
       description: data.description
             ?? content
