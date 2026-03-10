@@ -33,7 +33,7 @@ const EducationSection = () => {
                         >
                             <CardHeader>
                                 <CardTitle className="text-lg text-primary">{edu.degree}</CardTitle>
-                                <CardDescription className="pt-1 !text-foreground">{edu.institution}</CardDescription>
+                                <p className="pt-1 text-sm font-medium text-foreground">{edu.institution}</p>
                                 <CardDescription>{edu.duration}</CardDescription>
                             </CardHeader>
                             <CardContent>

@@ -30,19 +30,25 @@ const links = [
 const SocialLinks = () => {
     return (
         <div className="flex items-center space-x-2">
-            {links.map((link) => (
-                <Button
-                    key={link.label}
-                    variant="outline"
-                    size="icon"
-                    asChild
-                    aria-label={link.label}
-                >
-                    <a href={link.href} target="_blank" rel="noopener noreferrer">
-                        {link.icon}
-                    </a>
-                </Button>
-            ))}
+            {links.map((link) => {
+                const isExternal = link.href.startsWith("http");
+                return (
+                    <Button
+                        key={link.label}
+                        variant="outline"
+                        size="icon"
+                        asChild
+                        aria-label={link.label}
+                    >
+                        <a
+                            href={link.href}
+                            {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        >
+                            {link.icon}
+                        </a>
+                    </Button>
+                );
+            })}
         </div>
     );
 };

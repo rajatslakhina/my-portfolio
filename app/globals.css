@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Dark Theme (Minimal, Blue Accent) */
+    /* Light Theme */
     --background: 0 0% 100%; /* Rich black */
     --foreground: 0 0% 3.9%;     /* White text */
 
@@ -32,6 +32,8 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%; /* Accent Blue */
+
+    --whatsapp: 142 72% 29%;
 
     --radius: 0.5rem;
 
@@ -68,6 +70,7 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
+    --whatsapp: 142 72% 36%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;

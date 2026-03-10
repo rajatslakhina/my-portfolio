@@ -15,9 +15,18 @@ import { Button } from "@/components/ui/button";
 import { Github, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
+const containerVariants = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.12,
+        },
+    },
+};
+
 const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
 };
 
 const ProjectsSection = () => {
@@ -27,15 +36,17 @@ const ProjectsSection = () => {
                 My Work & Projects
             </h2>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <motion.div
+                className="grid grid-cols-1 gap-6 md:grid-cols-2"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+            >
                 {PROJECTS.map((project) => (
                     <motion.div
                         key={project.title}
                         variants={cardVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
                         className="h-full"
                     >
                         <Card className="flex h-full flex-col justify-between bg-card/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10" aria-label={`Project: ${project.title}`}>
@@ -78,7 +89,7 @@ const ProjectsSection = () => {
                         </Card>
                     </motion.div>
                 ))}
-            </div>
+            </motion.div>
         </SectionWrapper>
     );
 };

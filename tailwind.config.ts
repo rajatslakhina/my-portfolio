@@ -1,13 +1,13 @@
 import type { Config } from "tailwindcss"
 import tailwindcssAnimate from "tailwindcss-animate"
+import typography from "@tailwindcss/typography"
+
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
   	container: {
@@ -18,26 +18,6 @@ const config = {
   		}
   	},
   	extend: {
-  		spacing: {
-  			'1': '0.25rem',
-  			'2': '0.5rem',
-  			'3': '0.75rem',
-  			'4': '1rem',
-  			'5': '1.25rem',
-  			'6': '1.5rem',
-  			'7': '1.75rem',
-  			'8': '2rem',
-  			'10': '2.5rem',
-  			'12': '3rem',
-  			'16': '4rem',
-  			'20': '5rem',
-  			'24': '6rem',
-  			'32': '8rem',
-  			'0.5': '0.125rem',
-  			'1.5': '0.375rem',
-  			'2.5': '0.625rem',
-  			'3.5': '0.875rem'
-  		},
   		colors: {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
@@ -78,7 +58,8 @@ const config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+  			whatsapp: 'hsl(var(--whatsapp))',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -109,7 +90,7 @@ const config = {
   		}
   	}
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [tailwindcssAnimate, typography],
 } satisfies Config
 
 export default config

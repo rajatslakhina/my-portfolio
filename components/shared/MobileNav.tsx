@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { NAV_LINKS } from "@/constants";
@@ -24,6 +24,7 @@ const MobileNav = () => {
                 </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex h-full flex-col">
                     <div className="flex items-center border-b pb-4">
                         <Logo />

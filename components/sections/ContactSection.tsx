@@ -1,6 +1,4 @@
 // components/sections/ContactSection.tsx
-"use client";
-
 import { CONTACT_DETAILS } from "@/constants";
 import SectionWrapper from "../shared/SectionWrapper";
 import { Button } from "@/components/ui/button";
@@ -48,44 +46,41 @@ const ContactSection = () => {
                 Get In Touch
             </h2>
 
-            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-                {/* Contact Info */}
-                <div className="flex flex-col space-y-8">
-                    <div className="mb-8">
-                        <h3 className="text-2xl font-semibold">{"Let's Connect"}</h3>
-                        <p className="mt-2 text-muted-foreground">
-                            {"I'm open to discussing new opportunities, projects, or just chatting about mobile tech."}
-                        </p>
-                    </div>
-                    <div className="space-y-4">
-                        {contactLinks.map((item) => (
-                            <div key={item.label} className="flex items-start" aria-label={`${item.label}: ${item.value}`}>
-                                <item.icon className="mr-4 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
-                                <div>
-                                    <h4 className="font-semibold">{item.label}</h4>
-                                    {item.href ? (
-                                        <a
-                                            href={item.href}
-                                            className="break-all text-muted-foreground transition-colors hover:text-primary"
-                                            {...(item.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                        >
-                                            {"displayValue" in item ? item.displayValue : item.value}
-                                        </a>
-                                    ) : (
-                                        <p className="text-muted-foreground">{item.value}</p>
-                                    )}
-                                </div>
+            <div className="mx-auto max-w-lg">
+                <div className="mb-8">
+                    <h3 className="text-2xl font-semibold">{"Let's Connect"}</h3>
+                    <p className="mt-2 text-muted-foreground">
+                        {"I'm open to discussing new opportunities, projects, or just chatting about mobile tech."}
+                    </p>
+                </div>
+                <div className="space-y-4">
+                    {contactLinks.map((item) => (
+                        <div key={item.label} className="flex items-start" aria-label={`${item.label}: ${item.value}`}>
+                            <item.icon className="mr-4 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
+                            <div>
+                                <h4 className="font-semibold">{item.label}</h4>
+                                {item.href ? (
+                                    <a
+                                        href={item.href}
+                                        className="break-all text-muted-foreground transition-colors hover:text-primary"
+                                        {...(item.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                    >
+                                        {"displayValue" in item ? item.displayValue : item.value}
+                                    </a>
+                                ) : (
+                                    <p className="text-muted-foreground">{item.value}</p>
+                                )}
                             </div>
-                        ))}
-                    </div>
-                    <div className="pt-4">
-                        <Button asChild size="lg" className="bg-green-600 hover:bg-green-700">
-                            <a href={CONTACT_DETAILS.whatsapp} target="_blank" rel="noopener noreferrer">
-                                <WhatsAppIcon className="mr-2 h-5 w-5" />
-                                Chat on WhatsApp
-                            </a>
-                        </Button>
-                    </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="pt-8">
+                    <Button asChild size="lg" className="bg-whatsapp hover:bg-whatsapp/90 text-white">
+                        <a href={CONTACT_DETAILS.whatsapp} target="_blank" rel="noopener noreferrer">
+                            <WhatsAppIcon className="mr-2 h-5 w-5" />
+                            Chat on WhatsApp
+                        </a>
+                    </Button>
                 </div>
             </div>
         </SectionWrapper>

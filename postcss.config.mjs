@@ -1,6 +1,6 @@
 const config = {
   plugins: {
-    tailwindcss: {}, // ✅ CORRECT: Use the package name 'tailwindcss'
+    tailwindcss: {},
     autoprefixer: {},
   },
 };

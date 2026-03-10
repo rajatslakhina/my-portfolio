@@ -1,6 +1,7 @@
 // components/shared/SectionWrapper.tsx
 "use client";
 
+import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -9,7 +10,7 @@ const SectionWrapper = ({
     className,
     id,
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     id?: string;
 }) => {

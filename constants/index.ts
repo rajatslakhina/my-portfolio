@@ -27,7 +27,7 @@ export const SITE_NAME = 'Rajat Lakhina';
 export const SITE_TITLE = 'Rajat Lakhina | Mobile Development Professional';
 export const SITE_DESCRIPTION =
   'Nearly 10 years of experience in mobile development, specializing in iOS, SwiftUI, and mobile architecture. Senior Consultant at ThoughtWorks.';
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rajatlakhina.com';
 
 export const NAV_LINKS = [
   { name: 'Home', href: '/' },

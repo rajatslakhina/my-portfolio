@@ -15,22 +15,22 @@ export default function HomePage() {
             <HeroSection />
 
             {/* About Preview */}
-            <Suspense>
+            <Suspense fallback={null}>
                 <AboutSection />
             </Suspense>
 
             {/* Skills Preview */}
-            <Suspense>
+            <Suspense fallback={null}>
                 <SkillsSection />
             </Suspense>
 
             {/* Projects Preview */}
-            <Suspense>
+            <Suspense fallback={null}>
                 <ProjectsSection />
             </Suspense>
 
             {/* View All Projects Button */}
-            <div className="mt-[-4rem] text-center mb-16">
+            <div className="mb-16 text-center">
                 <Button asChild variant="secondary" size="lg">
                     <Link href="/projects">View All Projects</Link>
                 </Button>
