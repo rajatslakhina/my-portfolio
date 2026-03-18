@@ -51,7 +51,7 @@ async function fetchPostsFromRepo(
   try {
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents`,
-      { headers: BASE_HEADERS(TOKEN), cache: 'no-store' }
+      { headers: BASE_HEADERS(TOKEN), next: { revalidate: 3600 } }
     );
     if (!res.ok) return [];
 
@@ -62,7 +62,7 @@ async function fetchPostsFromRepo(
 
     const posts = await Promise.all(
       mdFiles.map(async (file) => {
-        const raw = await fetch(file.download_url, { cache: 'no-store' }).then((r) => r.text());
+        const raw = await fetch(file.download_url, { next: { revalidate: 3600 } }).then((r) => r.text());
         const { data, content } = matter(raw);
         const slug = file.name.replace(/\.md$/, "");
         return {
@@ -123,12 +123,12 @@ export async function getBlogPost(
     const { owner, repo } = category;
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${slug}.md`,
-      { headers: BASE_HEADERS(TOKEN), cache: 'no-store' }
+      { headers: BASE_HEADERS(TOKEN), next: { revalidate: 3600 } }
     );
     if (!res.ok) return null;
 
     const file = (await res.json()) as GithubFile;
-    const raw  = await fetch(file.download_url, { cache: 'no-store' }).then((r) => r.text());
+    const raw  = await fetch(file.download_url, { next: { revalidate: 3600 } }).then((r) => r.text());
     const { data, content } = matter(raw);
 
     return {
