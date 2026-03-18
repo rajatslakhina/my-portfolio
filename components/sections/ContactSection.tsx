@@ -121,7 +121,7 @@ export default function ContactSection() {
             style={{ borderColor: "hsl(142 72% 50%)" }} />
           <WhatsAppIcon className="relative h-5 w-5" />
           <span className="relative">Chat on WhatsApp</span>
-          <span className="relative font-mono-accent text-[10px] opacity-60">// instant connect</span>
+          <span className="relative font-mono-accent text-[10px] opacity-60">· instant connect</span>
         </motion.a>
       </div>
     </SectionWrapper>
