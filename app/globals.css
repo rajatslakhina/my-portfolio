@@ -149,3 +149,81 @@
   background-image: radial-gradient(circle, hsl(var(--primary) / 0.15) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
+/* ── Custom cursor global hide ── */
+*, *::before, *::after {
+  cursor: none !important;
+}
+a, button, [role="button"], input, textarea, select, [tabindex] {
+  cursor: none !important;
+}
+
+/* ── Angular clip-path shapes ── */
+.clip-angular-sm {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+}
+.clip-angular-md {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.clip-angular-lg {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+/* ── Neon border glow ── */
+.neon-border-primary {
+  border: 1px solid hsl(var(--primary) / 0.35);
+  box-shadow: 0 0 15px hsl(var(--primary) / 0.15), inset 0 0 15px hsl(var(--primary) / 0.05);
+}
+.neon-border-secondary {
+  border: 1px solid hsl(var(--secondary) / 0.35);
+  box-shadow: 0 0 15px hsl(var(--secondary) / 0.15), inset 0 0 15px hsl(var(--secondary) / 0.05);
+}
+
+/* ── 3D card depth ── */
+.depth-card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out;
+}
+
+/* ── Clip-path reveal ── */
+@keyframes clip-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+.animate-clip-reveal {
+  animation: clip-reveal 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+/* ── Only hide cursor on pointer devices (desktop) ── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+@media (pointer: coarse) {
+  *, *::before, *::after { cursor: auto !important; }
+}
+
+/* ── RGB chromatic aberration on active state ── */
+@keyframes chroma {
+  0%, 100% { text-shadow: -2px 0 hsl(335 100% 50%/0.5), 2px 0 hsl(186 100% 50%/0.5); }
+  50%       { text-shadow: 2px 0 hsl(335 100% 50%/0.5), -2px 0 hsl(186 100% 50%/0.5); }
+}
+.chroma-text:hover {
+  animation: chroma 0.3s linear infinite;
+}
+
+/* ── HUD pulsing border ── */
+@keyframes border-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px hsl(var(--primary)/0.2); }
+  50%       { box-shadow: 0 0 0 1px hsl(var(--primary)/0.6), 0 0 20px hsl(var(--primary)/0.1); }
+}
+.border-pulse {
+  animation: border-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Glass card depth ── */
+.glass-depth {
+  background: linear-gradient(135deg, hsl(var(--card)/0.8), hsl(var(--card)/0.4));
+  backdrop-filter: blur(20px);
+  border: 1px solid hsl(var(--primary)/0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 hsl(255 255% 100%/0.05);
+}

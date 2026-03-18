@@ -5,10 +5,12 @@ import "./globals.css";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import BackgroundEffects from "@/components/effects/BackgroundEffects";
+import CustomCursor from "@/components/effects/CustomCursor";
+import BootSequence from "@/components/effects/BootSequence";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, SOCIAL_LINKS } from "@/constants";
 
-const inter    = Inter          ({ subsets: ["latin"], variable: "--font-sans" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif", style: ["normal", "italic"] });
+const inter     = Inter          ({ subsets: ["latin"], variable: "--font-sans" });
+const playfair  = Playfair_Display({ subsets: ["latin"], variable: "--font-serif", style: ["normal","italic"] });
 const jetbrains = JetBrains_Mono ({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
@@ -43,7 +45,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} ${inter.className} antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} ${inter.className} antialiased cursor-none`}>
+        <BootSequence />
+        <CustomCursor />
         <BackgroundEffects />
         <Header />
         <main className="relative container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
