@@ -7,7 +7,7 @@ import Footer from "@/components/shared/Footer";
 import BackgroundEffects from "@/components/effects/BackgroundEffects";
 import CustomCursor from "@/components/effects/CustomCursor";
 import BootSequence from "@/components/effects/BootSequence";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, SOCIAL_LINKS } from "@/constants";
+import { SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/constants";
 
 const inter     = Inter          ({ subsets: ["latin"], variable: "--font-sans" });
 const playfair  = Playfair_Display({ subsets: ["latin"], variable: "--font-serif", style: ["normal","italic"] });
@@ -15,15 +15,35 @@ const jetbrains = JetBrains_Mono ({ subsets: ["latin"], variable: "--font-mono" 
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title:  { default: SITE_TITLE, template: `%s | ${SITE_NAME}` },
-  description: SITE_DESCRIPTION,
-  keywords: ["Rajat Lakhina","Mobile Architect","iOS Developer","SwiftUI","ThoughtWorks","Portfolio"],
+  title: {
+    default: "Rajat Lakhina — Engineering Leader · Mobile Platforms · ThoughtWorks",
+    template: "%s | Rajat Lakhina",
+  },
+  description:
+    "Senior engineering leader with 10+ years building and scaling mobile teams at scale. iOS platform architect, AI-First development advocate, ThoughtWorks Senior Consultant. Open to engineering management and Staff+ roles.",
+  keywords: [
+    "Engineering Manager",
+    "Mobile Platform Lead",
+    "iOS Engineering Manager",
+    "ThoughtWorks",
+    "Swift",
+    "SwiftUI",
+    "AI-First Development",
+    "Engineering Leadership",
+    "Mobile Architecture",
+    "Rajat Lakhina",
+  ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   openGraph: {
-    type: "website", locale: "en_US", url: SITE_URL,
-    title: SITE_TITLE, description: SITE_DESCRIPTION, siteName: SITE_NAME,
-    images: [{ url: `${SITE_URL}/rajat-profile.webp`, width: 400, height: 400, alt: SITE_NAME }],
+    title: "Rajat Lakhina — Engineering Leader",
+    description:
+      "Senior engineering leader with 10+ years building high-performing mobile teams. Open to EM and Staff+ roles.",
+    url: process.env.NEXT_PUBLIC_SITE_URL,
+    siteName: "Rajat Lakhina",
+    images: [{ url: "/rajat-profile.webp", width: 800, height: 800, alt: "Rajat Lakhina" }],
+    locale: "en_US",
+    type: "website",
   },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg", apple: "/apple-touch-icon.svg" },
   manifest: `${SITE_URL}/manifest.json`,
@@ -33,7 +53,7 @@ const jsonLd = {
   "@context": "https://schema.org", "@type": "Person",
   name: "Rajat S. Lakhina", url: SITE_URL,
   sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.medium],
-  jobTitle: "Mobile Development Professional",
+  jobTitle: "Engineering Leader",
   worksFor: { "@type": "Organization", name: "ThoughtWorks" },
   email: SOCIAL_LINKS.email, telephone: SOCIAL_LINKS.phone,
   address: { "@type": "PostalAddress", addressLocality: "Gurugram", addressRegion: "HR", addressCountry: "IN" },
