@@ -1,7 +1,8 @@
 // components/effects/BackgroundEffects.tsx
 "use client";
 import { useReducedMotion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
 function InteractiveCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,12 +17,10 @@ function InteractiveCanvas() {
 
     let W = 0, H = 0;
 
-    // --- Matrix rain columns ---
     const CHARS = "01アイウエオカキクケコサシスセソタチツテトナニ∆∇⌘⌥⌦⌫⎋".split("");
     const COL_W = 20;
     let cols: number[] = [];
 
-    // --- Floating orbs ---
     interface Orb { x:number; y:number; vx:number; vy:number; r:number; color:string; alpha:number }
     const COLORS = ["hsl(186,100%,50%)", "hsl(275,100%,60%)", "hsl(335,100%,50%)"];
     let orbs: Orb[] = [];
@@ -52,11 +51,9 @@ function InteractiveCanvas() {
       rafRef.current = requestAnimationFrame(draw);
       frame++;
 
-      // Clear with deep fade
       ctx.fillStyle = "rgba(5,8,15,0.08)";
       ctx.fillRect(0, 0, W, H);
 
-      // ── Matrix rain (every 3 frames) ──
       if (frame % 3 === 0) {
         ctx.font = `11px "JetBrains Mono",monospace`;
         cols.forEach((y, i) => {
@@ -72,12 +69,10 @@ function InteractiveCanvas() {
         });
       }
 
-      // ── Interactive orbs ──
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
 
       orbs.forEach((o) => {
-        // Mouse repulsion
         const dx = o.x - mx;
         const dy = o.y - my;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -86,14 +81,10 @@ function InteractiveCanvas() {
           o.vx += (dx / dist) * force;
           o.vy += (dy / dist) * force;
         }
-
-        // Dampen + move
         o.vx *= 0.97;
         o.vy *= 0.97;
         o.x += o.vx;
         o.y += o.vy;
-
-        // Wrap
         if (o.x < 0) o.x = W;
         if (o.x > W) o.x = 0;
         if (o.y < 0) o.y = H;
@@ -108,7 +99,6 @@ function InteractiveCanvas() {
         ctx.shadowBlur = 0;
       });
 
-      // ── Connection lines between nearby orbs ──
       if (frame % 2 === 0) {
         for (let i = 0; i < orbs.length; i++) {
           for (let j = i + 1; j < orbs.length; j++) {
@@ -146,15 +136,22 @@ function InteractiveCanvas() {
 }
 
 export default function BackgroundEffects() {
-  const reduced = useReducedMotion();
+  const reduced        = useReducedMotion();
+  const { theme }      = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
+
+  // Before mount, use dark defaults to avoid flash
+  const isDark = !mounted || theme !== "light";
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
 
-      {/* Interactive matrix + orb canvas */}
-      {!reduced && <InteractiveCanvas />}
+      {/* Canvas matrix rain — dark mode only */}
+      {isDark && !reduced && <InteractiveCanvas />}
 
-      {/* Line grid overlay */}
+      {/* Line grid — always */}
       <div className="absolute inset-0 bg-grid opacity-25" />
 
       {/* Radial glows */}
@@ -162,17 +159,21 @@ export default function BackgroundEffects() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_100%_110%,hsl(275_100%_60%/0.08),transparent)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_35%_35%_at_0%_65%,hsl(335_100%_50%/0.05),transparent)]" />
 
-      {/* Deep vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_50%,hsl(222_47%_2%/0.9)_100%)]" />
+      {/* Deep vignette — dark mode only */}
+      {isDark && (
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_50%,hsl(222_47%_2%/0.9)_100%)]" />
+      )}
 
-      {/* Scanlines */}
-      <div
-        className="absolute inset-0"
-        style={{ backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,255,0.012) 3px,rgba(0,255,255,0.012) 4px)" }}
-      />
+      {/* Scanlines — dark mode only */}
+      {isDark && (
+        <div
+          className="absolute inset-0"
+          style={{ backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,255,0.012) 3px,rgba(0,255,255,0.012) 4px)" }}
+        />
+      )}
 
-      {/* Moving scan line */}
-      {!reduced && (
+      {/* Moving scan line — dark mode only */}
+      {isDark && !reduced && (
         <div
           className="absolute left-0 right-0 h-px pointer-events-none"
           style={{
@@ -183,12 +184,30 @@ export default function BackgroundEffects() {
         />
       )}
 
-      {/* Deep ambient blobs */}
+      {/* Ambient blobs */}
       {!reduced && (
         <>
-          <div className="absolute -left-56 top-1/4 h-[700px] w-[700px] rounded-full bg-primary/4 blur-[180px] animate-blob" style={{ animationDelay: "0s" }} />
-          <div className="absolute -right-56 top-1/3 h-[600px] w-[600px] rounded-full bg-secondary/4 blur-[160px] animate-blob" style={{ animationDelay: "3s" }} />
-          <div className="absolute bottom-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-accent/3 blur-[160px] animate-blob" style={{ animationDelay: "5s" }} />
+          <div
+            className="absolute -left-56 top-1/4 h-[700px] w-[700px] rounded-full blur-[180px] animate-blob"
+            style={{
+              background: isDark ? "hsl(186 100% 50% / 0.04)" : "hsl(186 75% 28% / 0.07)",
+              animationDelay: "0s",
+            }}
+          />
+          <div
+            className="absolute -right-56 top-1/3 h-[600px] w-[600px] rounded-full blur-[160px] animate-blob"
+            style={{
+              background: isDark ? "hsl(275 100% 60% / 0.04)" : "hsl(275 65% 38% / 0.07)",
+              animationDelay: "3s",
+            }}
+          />
+          <div
+            className="absolute bottom-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full blur-[160px] animate-blob"
+            style={{
+              background: isDark ? "hsl(335 100% 50% / 0.03)" : "hsl(335 70% 40% / 0.06)",
+              animationDelay: "5s",
+            }}
+          />
         </>
       )}
 
