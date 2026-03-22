@@ -8,27 +8,21 @@ export interface Testimonial {
   linkedin?: string;
 }
 
-// Edit this file to add real LinkedIn recommendations
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: "1",
-    name: "Sarah Mitchell",
-    title: "Engineering Manager",
-    company: "ThoughtWorks",
-    text: "Rajat is one of the most thoughtful mobile architects I've worked with. He has a rare ability to balance technical depth with delivery pragmatism — he'll push back on over-engineering while still landing a clean, scalable solution. His mentorship of junior engineers on our team was genuinely transformative.",
+    name: "Gaurav Katiyar",
+    title: "Technical Architect",
+    company: "HCLTech",
+    text: "Working with Rajat has been a great experience. He\u2019s one of those developers who\u2019s always willing to help, share knowledge, and collaborate to solve problems effectively. I\u2019ve seen him take ownership of challenging tasks, debug complex issues, and consistently deliver quality work on time. His strong sense of teamwork and positive attitude make projects smoother and more enjoyable. Any team would be lucky to have Rajat \u2014 a reliable developer and an even better teammate.",
+    linkedin: "https://www.linkedin.com/in/rajat-s-lakhina-952785107/",
   },
   {
     id: "2",
-    name: "Arun Sharma",
-    title: "Senior Product Manager",
-    company: "REA Group",
-    text: "Working with Rajat on the iOS platform was a great experience. He owned the SwiftUI architecture end-to-end, proactively flagged risks early, and delivered the map clustering feature weeks ahead of schedule. More importantly, he made the right technical calls under pressure.",
-  },
-  {
-    id: "3",
-    name: "James Chen",
-    title: "Head of Engineering",
-    company: "Standard Chartered",
-    text: "Rajat led the mobile engineering stream for our Next Gen Banking project with quiet confidence. He mentored 5 engineers, ran architecture reviews, and drove a 35% improvement in module usability metrics. He is exactly the kind of senior iOS engineer you want on a high-stakes platform.",
+    name: "Bharat Devgan",
+    title: "Lead Developer",
+    company: "Swift & SwiftUI",
+    text: "I had the pleasure of working with Rajat, an exceptionally talented iOS Developer who brings both technical depth and a strong problem-solving mindset to every project. Rajat has a solid command over SwiftUI, Combine, and the Singleton pattern, and he has successfully implemented various iOS design patterns across multiple projects. What stands out most about Rajat is his ability to combine clean architecture with practical, real-world solutions \u2014 especially in the banking domain, where reliability and performance are crucial.",
+    linkedin: "https://www.linkedin.com/in/rajat-s-lakhina-952785107/",
   },
 ];
