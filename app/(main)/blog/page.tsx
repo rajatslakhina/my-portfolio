@@ -46,7 +46,7 @@ async function getGithubPosts(): Promise<Post[]> {
           if (raw.ok) {
             const text = await raw.text()
             const h1 = text.match(/^#\s+(.+)$/m)
-            if (h1) title = h1[1].trim()
+            if (h1) title = h1[1].trim().replace(/^(article|chapter|part|section)\s+\d+:\s*/i, "")
             const words = text.split(/\s+/).length
             readTime = `${Math.max(1, Math.round(words / 200))} min read`
             const lines = text.split("\n")
