@@ -1,42 +1,21 @@
 {
-  "project": "rajat-portfolio",
-  "language": "typescript",
-  "framework": "nextjs",
-  "strictMode": true,
-  "lint": true,
-  "testRequired": false,
-  "codeStyle": "clean-architecture",
-  "avoidDuplicateFiles": true,
   "permissions": {
     "allow": [
-      "Read(**)",
-      "Bash(npm run build)",
-      "Bash(npm run lint)",
-      "Bash(npm run dev)",
+      "Bash(npm run build*)",
+      "Bash(npm run lint*)",
+      "Bash(npm run dev*)",
+      "Bash(npm run test*)",
+      "Bash(npx tsc*)",
+      "Bash(npx vitest*)",
+      "Bash(npx playwright*)",
       "Bash(npx prettier --write *)",
       "Bash(npx shadcn@latest add *)",
-      "Bash(git status)",
-      "Bash(git diff *)",
-      "Bash(git log *)",
-      "Bash(git branch *)",
-      "Bash(cat *)",
-      "Bash(ls *)",
-      "Bash(find *)"
+      "Bash(git*)"
     ],
     "deny": [
-      "Read(.env*)",
       "Bash(rm -rf *)",
-      "Bash(git push *)",
-      "Bash(git checkout main)",
+      "Bash(git push --force*)",
       "Bash(npm publish *)"
-    ]
-  },
-  "hooks": {
-    "afterWrite": [
-      {
-        "pattern": "**/*.{ts,tsx}",
-        "command": "npx prettier --write $FILE"
-      }
     ]
   }
 }
