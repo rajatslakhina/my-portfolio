@@ -1,9 +1,11 @@
 "use client";
+import { useState } from "react";
 import { CONTACT_DETAILS } from "@/constants";
 import SectionWrapper from "../shared/SectionWrapper";
-import { Mail, MapPin, Phone, Linkedin, Send, Radio } from "lucide-react";
+import { Mail, MapPin, Phone, Linkedin, Send, Radio, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { MediumIcon, WhatsAppIcon } from "@/components/icons";
 import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const contactLinks = [
   { icon: Mail,       label: "Email",    value: CONTACT_DETAILS.email,    href: `mailto:${CONTACT_DETAILS.email}`,        color: "hsl(186 100% 50%)" },
@@ -21,6 +23,23 @@ const fadeUp = {
 
 export default function ContactSection() {
   const reduced = useReducedMotion();
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [status, setStatus] = useState<"idle"|"loading"|"success"|"error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setStatus(res.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
 
   return (
     <SectionWrapper id="contact">
@@ -124,6 +143,101 @@ export default function ContactSection() {
           <span className="relative font-mono-accent text-[10px] opacity-60">· instant connect</span>
         </motion.a>
       </div>
+
+      {/* ── Contact Form ── */}
+      <motion.div
+        className="mx-auto mt-10 max-w-xl"
+        initial={reduced ? false : { opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <div className="mb-6 flex items-center gap-2">
+          <div className="h-px w-6 bg-primary/60" />
+          <span className="font-mono-accent text-[9px] tracking-[0.3em] text-primary/50 uppercase">Send a message</span>
+          <div className="h-px flex-1 bg-primary/10" />
+        </div>
+
+        {status === "success" ? (
+          <div className="flex items-center gap-3 border border-primary/30 bg-primary/8 p-6"
+            style={{ clipPath: "polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))" }}>
+            <CheckCircle className="h-5 w-5 text-primary shrink-0" />
+            <div>
+              <p className="font-mono-accent text-[11px] uppercase tracking-wider text-primary font-semibold">Message sent</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">Thanks &mdash; I&apos;ll get back to you within 48 hours.</p>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="font-mono-accent text-[9px] uppercase tracking-widest text-muted-foreground/60">Name *</label>
+                <input
+                  required
+                  value={form.name}
+                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                  className={cn("border bg-card/40 px-3 py-2.5 font-mono-accent text-[11px] text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors",
+                    "border-white/10 focus:border-primary/40")}
+                  style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+                  placeholder="Rajat Lakhina"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="font-mono-accent text-[9px] uppercase tracking-widest text-muted-foreground/60">Email *</label>
+                <input
+                  required
+                  type="email"
+                  value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  className={cn("border bg-card/40 px-3 py-2.5 font-mono-accent text-[11px] text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors",
+                    "border-white/10 focus:border-primary/40")}
+                  style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+                  placeholder="you@company.com"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono-accent text-[9px] uppercase tracking-widest text-muted-foreground/60">Subject</label>
+              <input
+                value={form.subject}
+                onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
+                className={cn("border bg-card/40 px-3 py-2.5 font-mono-accent text-[11px] text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors",
+                  "border-white/10 focus:border-primary/40")}
+                style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+                placeholder="Tech Lead opportunity / Collaboration / etc."
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono-accent text-[9px] uppercase tracking-widest text-muted-foreground/60">Message *</label>
+              <textarea
+                required
+                rows={5}
+                value={form.message}
+                onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                className={cn("resize-none border bg-card/40 px-3 py-2.5 font-mono-accent text-[11px] text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors",
+                  "border-white/10 focus:border-primary/40")}
+                style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+                placeholder="Tell me about the role / project / opportunity..."
+              />
+            </div>
+            {status === "error" && (
+              <div className="flex items-center gap-2 text-destructive">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                <p className="font-mono-accent text-[9px] uppercase tracking-wider">Failed to send — please try emailing directly.</p>
+              </div>
+            )}
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="flex items-center justify-center gap-2 border border-primary/30 bg-primary/10 px-6 py-3 font-mono-accent text-[10px] uppercase tracking-widest text-primary hover:border-primary/60 hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              style={{ clipPath: "polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))" }}
+            >
+              {status === "loading" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />}
+              {status === "loading" ? "Sending..." : "Send Message"}
+            </button>
+          </form>
+        )}
+      </motion.div>
     </SectionWrapper>
   );
 }

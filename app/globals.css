@@ -29,6 +29,30 @@
   .dark {
     color-scheme: dark;
   }
+  .light {
+    color-scheme: light;
+    --background: 220 20% 97%;
+    --foreground: 220 25% 8%;
+    --card: 220 20% 93%;
+    --card-foreground: 220 25% 8%;
+    --popover: 220 20% 93%;
+    --popover-foreground: 220 25% 8%;
+    --primary: 186 70% 32%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 275 55% 42%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 15% 87%;
+    --muted-foreground: 220 12% 38%;
+    --accent: 335 65% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 15% 78%;
+    --input: 220 15% 87%;
+    --ring: 186 70% 32%;
+    --radius: 0.75rem;
+  }
+
 }
 
 @layer base {

@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import Logo from "./Logo";
 import MobileNav from "./MobileNav";
 import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "@/components/ui/theme-toggle";
+import ResumeViewer from "@/components/ui/resume-viewer";
 
 const Header = () => {
   const pathname = usePathname();
@@ -82,6 +84,10 @@ const Header = () => {
             })}
           </nav>
 
+          <div className="hidden md:flex md:items-center md:gap-2">
+            <ResumeViewer />
+            <ThemeToggle />
+          </div>
           <div className="md:hidden">
             <MobileNav />
           </div>

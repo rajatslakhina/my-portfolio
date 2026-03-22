@@ -17,6 +17,7 @@ interface Project {
   description: string;
   tags: string[];
   liveUrl?: string;
+  caseStudySlug?: string;
   color: "primary" | "secondary" | "accent";
 }
 
@@ -43,6 +44,7 @@ const PROJECTS: Project[] = [
       "Led end-to-end SwiftUI architecture for Australia's #1 property platform. Built property discovery, interactive map clustering, and real-time listing updates — driving a 15% increase in user engagement.",
     tags: ["SwiftUI", "Maps", "CoreData", "Swift"],
     liveUrl: "https://apps.apple.com/au/app/realestate-com-au-property/id404667893",
+    caseStudySlug: "rea-real-estate",
     color: "secondary",
   },
   {
@@ -86,6 +88,7 @@ const PROJECTS: Project[] = [
       "Lead & Mentor on next-generation banking app for Singapore. Optimised profile, daily banking, and wealth modules — driving a 35% improvement in usability and task completion rates.",
     tags: ["Swift", "UIKit", "MVVM", "Banking"],
     liveUrl: "https://apps.apple.com/sg/app/sc-mobile-singapore/id367337298",
+    caseStudySlug: "sc-next-gen-banking",
     color: "primary",
   },
   {

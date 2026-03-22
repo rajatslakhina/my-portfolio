@@ -1,15 +1,46 @@
 export const SITE_NAME = "Rajat Lakhina"
+export const SITE_URL  = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rajatlakhina.com"
 export const RESUME_URL = "/resume.pdf"
+
+export const CONTACT_DETAILS = {
+  email:    "rajat.s.lakhina@gmail.com",
+  phone:    "+91-98100-00000",
+  location: "Gurugram, Haryana, India",
+  linkedin: "https://www.linkedin.com/in/rajatlakhina",
+  medium:   "https://medium.com/@rajatlakhina",
+  whatsapp: "https://wa.me/919810000000",
+} as const
 
 export const NAV_LINKS = [
   { href: "/",        name: "Home"    },
   { href: "/blog",    name: "Blog"    },
-  { href: "/contact", name: "Contact" },
+  { href: "/resources", name: "Resources" },
+  { href: "/contact",   name: "Contact"   },
 ] as const
 
 export const SOCIAL_LINKS = [
   { href: "https://linkedin.com/in/rajatlakhina", label: "LinkedIn" },
   { href: "https://github.com/rajatlakhina",      label: "GitHub"   },
+] as const
+
+
+export const BLOG_CATEGORIES = [
+  { slug: "ai",           label: "AI & LLMs",            emoji: "🤖", color: "hsl(186 100% 50%)", owner: "rajatslakhina", repo: "AI-Knowledge" },
+  { slug: "ios",          label: "iOS & Swift",          emoji: "📱", color: "hsl(275 100% 60%)", owner: "rajatslakhina", repo: "AI-Knowledge" },
+  { slug: "architecture", label: "Architecture",          emoji: "🏗️", color: "hsl(335 100% 55%)", owner: "rajatslakhina", repo: "AI-Knowledge" },
+  { slug: "leadership",   label: "Engineering Leadership", emoji: "🧭", color: "hsl(186 100% 50%)", owner: "rajatslakhina", repo: "AI-Knowledge" },
+] as const
+export type BlogCategory = typeof BLOG_CATEGORIES[number]
+
+export const EDUCATION = [
+  {
+    degree:      "Bachelor of Technology — Computer Science",
+    institution: "Rajasthan Technical University",
+    duration:    "2012 – 2016",
+    description: "Core CS fundamentals, algorithms, data structures, and software engineering principles.",
+    details: "Graduated with distinction. Core coursework: Data Structures, Algorithms, Operating Systems, Computer Networks, DBMS, Software Engineering.",
+    grade: "First Division",
+  },
 ] as const
 
 export const EXPERIENCE = [
