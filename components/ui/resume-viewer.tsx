@@ -63,12 +63,32 @@ export default function ResumeViewer({ trigger, className }: ResumeViewerProps) 
               </Dialog.Close>
             </div>
           </div>
-          {/* PDF iframe */}
-          <iframe
-            src="/resume.pdf"
-            className="flex-1 w-full bg-white"
-            title="Rajat Lakhina Resume"
-          />
+          {/* PDF viewer — object/embed has better cross-browser support than iframe */}
+          <object
+            data="/resume.pdf#toolbar=1&view=FitH"
+            type="application/pdf"
+            className="flex-1 w-full"
+            aria-label="Rajat Lakhina Resume"
+          >
+            <embed
+              src="/resume.pdf#toolbar=1&view=FitH"
+              type="application/pdf"
+              className="w-full h-full"
+            />
+            {/* Last-resort fallback */}
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10 text-center">
+              <p className="font-mono-accent text-sm text-muted-foreground">
+                Your browser can&apos;t preview PDFs inline.
+              </p>
+              <a
+                href="/resume.pdf"
+                download="RajatLakhina_CV.pdf"
+                className="font-mono-accent text-xs uppercase tracking-widest text-primary border border-primary/40 px-4 py-2 hover:bg-primary/10 transition-colors"
+              >
+                Download CV instead
+              </a>
+            </div>
+          </object>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
