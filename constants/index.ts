@@ -1,432 +1,146 @@
-// constants/index.ts
-import {
-  Code,
-  Cpu,
-  Database,
-  Feather,
-  GitBranch,
-  Globe,
-  HardDrive,
-  Layers,
-  Megaphone,
-  Monitor,
-  Move,
-  Puzzle,
-  Smartphone,
-  Gauge,
-  Shield,
-  GitPullRequest,
-  Settings,
-  LineChart,
-  Server,
-  Cloud,
-  BarChart,
-} from 'lucide-react';
-
-export const SITE_NAME = 'Rajat Lakhina';
-export const SITE_TITLE = 'Rajat Lakhina | Mobile Development Professional';
-export const SITE_DESCRIPTION =
-  'Nearly 10 years of experience in mobile development, specializing in iOS, SwiftUI, and mobile architecture. Senior Consultant at ThoughtWorks.';
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rajatlakhina.com';
+export const SITE_NAME = "Rajat Lakhina"
+export const RESUME_URL = "/resume.pdf"
 
 export const NAV_LINKS = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Skills', href: '/skills' },
-  { name: 'Experience', href: '/experience' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Education', href: '/education' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Contact', href: '/contact' },
-];
+  { href: "/",        name: "Home"    },
+  { href: "/blog",    name: "Blog"    },
+  { href: "/contact", name: "Contact" },
+] as const
 
-export const SOCIAL_LINKS = {
-  phone: '+91-9499109991',
-  email: 'rajat.s.lakhina@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/rajat-s-lakhina-952785107/',
-  medium: 'https://medium.com/@er.rajatlakhina',
-  whatsapp: 'https://wa.me/919499109991',
-};
-
-export const RESUME_URL = '/RajatSLakhina_CV.pdf';
-export const BLOG_CATEGORIES = [
-  {
-    slug:        "ai",
-    label:       "AI & Machine Learning",
-    description: "Exploring artificial intelligence, large language models, and practical AI applications.",
-    owner:       "rajatslakhina",
-    repo:        "AI-Knowledge",
-    color:       "primary",   // maps to hsl(var(--primary))
-    emoji:       "🤖",
-  },
-  // Add more categories here, e.g.:
-  // {
-  //   slug:  "ios",
-  //   label: "iOS Development",
-  //   description: "Deep dives into Swift, SwiftUI, and iOS architecture.",
-  //   owner: "your-username",
-  //   repo:  "ios-blog",
-  //   color: "secondary",
-  //   emoji: "📱",
-  // },
-] as const;
-
-export type BlogCategory = typeof BLOG_CATEGORIES[number];
-
-
-export const PROFILE_SUMMARY = {
-  title: 'About Me',
-  description: [
-    'A seasoned **Mobile Development Professional** with nearly **10 years of experience**, currently serving as a **Senior Consultant at ThoughtWorks**. My expertise spans the complete mobile product lifecycle, with a deep focus on **iOS development, SwiftUI, and robust mobile architecture**.',
-    'I specialize in leading end-to-end development, from ideation to deployment, ensuring solutions are not only technically sound but also perfectly aligned with stakeholder vision and business objectives. I am a strong advocate for Agile, DevOps, and CI/CD practices to drive efficiency and quality.',
-    'With a proven track record of delivering impactful solutions for multiple enterprise clients, I excel in creating **scalable, high-performance, and secure** mobile applications. My technical competencies include offline-first design, concurrency, and modular architecture.',
-  ],
-  coreCompetencies: [
-    'Mobile Architecture & Design',
-    'iOS & SwiftUI Development',
-    'Multi-Frontend Solutions',
-    'Performance Optimization',
-    'Application Security',
-    'Stakeholder Alignment',
-    'Agile & DevOps Methodologies',
-    'End-to-End Product Lifecycle',
-    'CI/CD Pipeline Management',
-    'Scalability & Offline-First Design',
-    'Concurrency & Modular Architecture',
-  ],
-};
-export const SKILLS = {
-  mobileFrameworks: [
-    { name: 'iOS', icon: Smartphone },
-    { name: 'SwiftUI', icon: Feather },
-    { name: 'Swift', icon: Code },
-    { name: 'UIKit', icon: Layers },
-    { name: 'Objective-C', icon: Code },
-    { name: 'Combine', icon: GitBranch },
-    { name: 'CoreData', icon: Database },
-    { name: 'CoreLocation', icon: Globe },
-    { name: 'CoreAnimation', icon: Move },
-  ],
-  architecturePatterns: [
-    { name: 'MVVM', icon: Layers },
-    { name: 'VIPER', icon: Layers },
-    { name: 'Clean Architecture', icon: Layers },
-    { name: 'Modular Architecture', icon: Puzzle },
-    { name: 'Concurrency', icon: Cpu },
-    { name: 'Offline-first Design', icon: HardDrive },
-    { name: 'Design Patterns', icon: Puzzle },
-    { name: 'SOLID Principles', icon: Puzzle },
-  ],
-  developmentPractices: [
-    { name: 'Agile/Scrum', icon: Gauge },
-    { name: 'TDD/BDD', icon: Settings },
-    { name: 'DevOps', icon: GitPullRequest },
-    { name: 'CI/CD', icon: GitPullRequest },
-    { name: 'Stakeholder Alignment', icon: Megaphone },
-    { name: 'Security', icon: Shield },
-    { name: 'Scalability', icon: BarChart },
-  ],
-  performanceMonitoring: [
-    { name: 'Performance Tuning', icon: Gauge },
-    { name: 'Memory Management', icon: HardDrive },
-    { name: 'App Store Connect', icon: LineChart },
-    { name: 'Firebase (Analytics, Crashlytics)', icon: Cloud },
-    { name: 'New Relic', icon: Monitor },
-  ],
-  toolsBuildSystems: [
-    { name: 'Xcode', icon: Settings },
-    { name: 'Git', icon: GitBranch },
-    { name: 'Jenkins', icon: Server },
-    { name: 'Bitrise', icon: Cloud },
-    { name: 'Fastlane', icon: Gauge },
-    { name: 'JIRA', icon: Puzzle },
-    { name: 'SPM', icon: Puzzle },
-    { name: 'CocoaPods', icon: Puzzle },
-    { name: 'Carthage', icon: Puzzle },
-  ],
-};
+export const SOCIAL_LINKS = [
+  { href: "https://linkedin.com/in/rajatlakhina", label: "LinkedIn" },
+  { href: "https://github.com/rajatlakhina",      label: "GitHub"   },
+] as const
 
 export const EXPERIENCE = [
   {
-    company: 'ThoughtWorks',
-    role: 'Senior Consultant (Mobile Applications)',
-    duration: '2024 – Present',
+    company: "ThoughtWorks",
+    role: "Senior Consultant — Mobile Applications",
+    duration: "2024 – Present",
     description:
-      'Leading mobile architecture and strategy, delivering high-impact, scalable, and secure solutions while driving operational excellence for enterprise clients.',
+      "Spearheading technical leadership in mobile solution architecture, managing design, development, and end-to-end delivery. Collaborating with cross-functional teams to build scalable, secure, and high-performing applications.",
     achievements: [
       {
-        company: 'TeleMessage',
-        duration: '6 Months',
+        company: "TeleMessage",
+        duration: "2024 (6 months)",
         points: [
-          'Achieved a 15% improvement in security for enterprise communication.',
-          'Automated a multi-repo merge system, streamlining development.',
-          'Delivered an end-to-end Signal-based enterprise messenger.',
+          "Spearheaded security automation achieving 15% enhancement in data protection across the platform",
+          "Designed and deployed an automated multi-repo code merge system, reducing manual effort and merge conflicts",
+          "Directed end-to-end development of the Signal-based enterprise messaging application ensuring privacy compliance",
         ],
       },
       {
-        company: 'PepsiCo – Super App',
-        duration: '7 Months',
+        company: "REA — Real Estate App",
+        duration: "2024 (9 months)",
         points: [
-          'Led solution architecture for a React Native–based Super App built on a micro-frontend strategy supporting multiple PepsiCo business units.',
-          'Designed modular mini-app boundaries, navigation isolation, and lifecycle management for scalable multi-team development.',
-          'Implemented Couchbase Lite–based offline-first data architecture with Sync Gateway for reliable field operations across poor network regions.',
+          "Architected and optimised SwiftUI-based modules for property discovery, listings, and user profiles",
+          "Enhanced user engagement by 15% through interactive map views, clustering, and real-time property updates",
         ],
       },
       {
-        company: 'REA Real Estate',
-        duration: '9 Months',
+        company: "PepsiCo Super App",
+        duration: "2024",
         points: [
-          'Architected reusable, interactive SwiftUI modules.',
-          'Boosted user engagement by +15% through new features.',
-          'Implemented interactive map and clustering functionalities.',
+          "Solution Architect — designed scalable modular frameworks for FMCG domain operations",
+          "Defined architecture standards covering multi-brand catalogues, distributor workflows, and field sales",
         ],
       },
     ],
   },
   {
-    company: 'DTC Infotech',
-    role: 'Senior Software Developer',
-    duration: '2023 – 2024',
+    company: "DTC Infotech",
+    role: "Senior Software Developer",
+    duration: "2023 – 2024",
+    description:
+      "Directed technical development and architectural design for mobile applications, collaborating with leads and stakeholders to ensure scalable, high-quality delivery.",
     achievements: [
       {
-        company: 'Khulke',
-        duration: '13 Months',
+        company: "Khulke",
+        duration: "2023 – 2024 (13 months)",
         points: [
-          'Modularized meeting and streaming frameworks for scalability.',
-          'Delivered $500k in value by migrating key UIKit flows to SwiftUI.',
-          'Built a highly reactive, performant SwiftUI-based Home Screen.',
-          'Integrated multiple REST APIs for seamless data flow.',
+          "Modularized Meeting and Live Streaming functionalities into independent frameworks, enhancing code reusability",
+          "Elevated user experience and delivered $500,000 value by migrating from UIKit to SwiftUI with async/await",
+          "Designed SwiftUI-based Home Screen with reactive data pipelines, driving improved UI responsiveness",
+          "Integrated RESTful APIs for robust, scalable communication between modules",
         ],
       },
     ],
   },
   {
-    company: 'Mobile Programming LLC',
-    role: 'Senior Software Developer',
-    duration: '2021 – 2023',
+    company: "Mobile Programming LLC",
+    role: "Senior Software Developer",
+    duration: "2021 – 2023",
+    description:
+      "Owned delivery across banking solutions, mentoring junior engineers and contributing to solutioning and architecture discussions.",
     achievements: [
       {
-        company: 'SC – Next Gen Banking',
-        duration: '18 Months',
+        company: "SC — Next Gen Banking",
+        duration: "2021 – 2023 (18 months)",
         points: [
-          'Built core wealth, profile, and daily banking modules.',
-          'Contributed to a +35% improvement in app usability.',
-          'Delivered $2M worth of scalable, reusable banking components.',
+          "Contributed to end-to-end development of next-generation banking app for Standard Chartered Singapore",
+          "Optimised profile, daily banking, and wealth modules driving a 35% increase in usability and task completion",
+          "Enhanced project efficiency by 20% through mentoring 5 junior engineers and leading architecture discussions",
         ],
       },
     ],
   },
   {
-    company: 'HCL Technologies',
-    role: 'Lead Engineer',
-    duration: '2019 – 2021',
+    company: "HCL Technologies",
+    role: "Lead Engineer",
+    duration: "2019 – 2021",
+    description:
+      "Spearheaded technical development programs, ensuring on-time delivery of $2M projects while architecting 10+ reusable components and templates.",
     achievements: [
       {
-        company: 'Airtel Payment Bank',
-        duration: '22 Months',
+        company: "Airtel Payment Bank",
+        duration: "2019 – 2021 (28 months)",
         points: [
-          'Achieved $500k in UX and performance gains.',
-          'Architected Onboarding, IRCTC, Home, and Insurance modules.',
-          'Improved rendering, concurrency, and memory management.',
+          "Delivered $500,000 in performance gains by migrating from UIKit to SwiftUI with async/await concurrency",
+          "Architected critical modules — Onboarding, IRCTC, Home Page, and Insurance — ensuring seamless integration",
+          "Revitalised the onboarding experience by redesigning workflows aligned with modern design language",
         ],
       },
       {
-        company: 'MD SnR License Fetch',
-        duration: '8 Months',
+        company: "MD SnR License Fetch",
+        duration: "2019 – 2020",
         points: [
-          'Delivered a real-time operational app for field teams with push-based alerts for new ticket assignments across users and groups.',
-          'Designed an efficient ticket-claiming system enabling field engineers to pick tasks directly from shared group queues.',
-          'Improved field productivity by streamlining access to ticket modules, status updates, and important operational information.',
+          "Lead Developer — built backend integrations and a library of reusable components",
+          "Delivered scalable, modular design patterns adopted across the project",
         ],
       },
     ],
   },
   {
-    company: 'Konnecs Infotech',
-    role: 'iOS Developer',
-    duration: '2016 – 2019',
+    company: "Konnecs Infotech",
+    role: "iOS Developer",
+    duration: "2016 – 2019",
+    description:
+      "First professional role in mobile development — deep technical optimisation of memory management, UI/UX rendering, and network performance.",
     achievements: [
       {
-        company: 'VegPlatter',
-        duration: '18 Months',
+        company: "VegPlatter",
+        duration: "2018 – 2019",
         points: [
-          'Engineered a full multi-role food delivery system supporting customers, restaurants, and delivery partners with real-time synchronization.',
-          'Implemented live GPS tracking with optimized location polling, improving delivery accuracy and reducing customer wait-time anxiety.',
-          'Architected scalable order, menu, and delivery modules—cutting API load times by 30% and improving checkout success rates.',
+          "Built a full-featured food ordering iOS app from scratch — menu browsing, cart, checkout, and order tracking",
+          "Optimised UI rendering and network performance for smooth experience on low-end devices",
         ],
       },
       {
-        company: 'Biyah App',
-        duration: '12 Months',
+        company: "Biyah",
+        duration: "2017 – 2018",
         points: [
-          'Built a location-aware matching engine enabling swipe-based discovery with high responsiveness and reduced latency.',
-          'Implemented real-time chat using socket programming with read receipts, typing indicators, and presence detection.',
-          'Optimized concurrency, pagination, and media caching—boosting profile load performance by 40% and enhancing user engagement.',
+          "Developed social networking iOS app focused on community features — profiles, feeds, and connections",
+          "Implemented real-time data sync and push notifications for engaged user experience",
         ],
       },
       {
-        company: 'Buzz App',
-        duration: '12 Months',
+        company: "Buzz App",
+        duration: "2016 – 2017",
         points: [
-          'Developed a scalable social feed allowing seamless posting of images, videos, and text with background uploads.',
-          'Improved content rendering performance through media compression, caching, and lazy-loading pipelines.',
-          'Architected modular components for Feed, Profile, Stories, and Notifications—reducing feature delivery time by 25%.',
+          "Built social networking app with content discovery, user interactions, and in-app messaging",
+          "Grew from iOS fundamentals to full ownership of the release pipeline within the first year",
         ],
       },
     ],
   },
-];
-
-export const PROJECTS = [
-  {
-    title: 'TeleMessage – Secure Enterprise Messenger',
-    description:
-      'Enterprise-grade secure messaging solution built on top of Signal, enabling compliant communication for regulated industries. Focused on automation, baseline sync, and multi-repo merge workflows.',
-    role: 'Senior Consultant · ThoughtWorks',
-    tags: [
-      'iOS',
-      'Swift',
-      'Objective-C',
-      'Signal Integration',
-      'Security',
-      'Multi-Repo Automation',
-      'Enterprise Messaging',
-    ],
-    live: 'https://apps.apple.com/us/app/tm-tlgrm/id1630122033',
-    link: '',
-  },
-  {
-    title: 'PepsiCo – Super App (React Native + Couchbase)',
-    description:
-      'A micro-frontend based React Native Super App designed for multiple business lines across PepsiCo. Led solution architecture for feature boundaries, modular mini-apps, offline-first workflows, and Couchbase Lite–based local storage and sync.',
-    role: 'Solution Architect · ThoughtWorks',
-    tags: [
-      'React Native',
-      'TypeScript',
-      'Super App Architecture',
-      'Micro-Frontends',
-      'Couchbase Lite',
-      'Sync Gateway',
-      'Offline-First',
-      'Solution Architecture',
-    ],
-  },
-  {
-    title: 'REA Real Estate – iOS Experience',
-    description:
-      'High-traffic real estate application with interactive maps, listing discovery, and reusable SwiftUI components. Focused on UX, engagement, and modular SwiftUI architecture.',
-    role: 'Senior Consultant · ThoughtWorks',
-    tags: [
-      'iOS',
-      'SwiftUI',
-      'Swift',
-      'Modular Architecture',
-      'Maps & Clustering',
-      'Performance Optimization',
-    ],
-    live: 'https://apps.apple.com/au/app/realestate-com-au-property/id404667893',
-  },
-  {
-    title: 'Khulke – Social Streaming & Engagement Platform',
-    description:
-      'Modular social platform combining live streaming, meetings, and interactive content. Migrated key experiences from UIKit to SwiftUI and improved app responsiveness and scalability.',
-    role: 'Senior Software Developer · DTC Infotech',
-    tags: ['SwiftUI', 'UIKit', 'Combine', 'Modular Architecture', 'Streaming', 'REST APIs'],
-    live: 'https://apps.apple.com/in/app/khul-ke-social-networking-app/id1590836834',
-  },
-  {
-    title: 'SC – Next Gen Banking',
-    description:
-      'Next-generation banking app for wealth, profile, and daily banking journeys. Delivered reusable banking components and significantly improved usability and feature scalability.',
-    role: 'Senior Software Developer · Mobile Programming LLC',
-    tags: [
-      'iOS',
-      'Swift',
-      'SwiftUI',
-      'Banking',
-      'Wealth Management',
-      'Reusable Components',
-      'UX Improvement',
-    ],
-    live: 'https://apps.apple.com/sg/app/sc-mobile-singapore/id367337298',
-  },
-  {
-    title: 'Airtel Payment Bank – Digital Banking & Services',
-    description:
-      'Large-scale digital banking app with onboarding, IRCTC, home, and insurance modules. Focused on performance, concurrency, and reliable, high-volume user journeys.',
-    role: 'Lead Engineer · HCL Technologies',
-    tags: [
-      'iOS',
-      'Swift',
-      'React Native',
-      'Concurrency',
-      'Performance',
-      'Banking',
-      'Module Architecture',
-    ],
-    live: 'https://apps.apple.com/in/app/airtel-thanks-recharge-bank/id543184334',
-  },
-  {
-    title: 'VegPlatter – Multi-Role Food Delivery Platform',
-    description:
-      'Food delivery platform supporting customers, restaurants, and delivery partners with real-time order tracking and operational flows.',
-    role: 'iOS Developer · Konnecs Infotech',
-    tags: [
-      'iOS',
-      'Swift',
-      'Location Tracking',
-      'Real-Time Updates',
-      'Multi-Role App',
-      'Food Delivery',
-    ],
-    live: 'https://apps.apple.com/in/app/veg-platter/id1291725650',
-  },
-  {
-    title: 'Biyah – Location-Based Dating Platform',
-    description:
-      'A proximity-based dating app featuring swipe interactions, location-aware match discovery, and real-time chat using socket programming.',
-    role: 'iOS Developer · Konnecs Infotech',
-    tags: ['iOS', 'Swift', 'Socket Chat', 'Reactive UI', 'Swipe Engine', 'Location Services'],
-  },
-  {
-    title: 'Buzz App – Social Networking Platform',
-    description:
-      'A social media app enabling users to post images, videos, and text with a high-performance feed, background uploads, and modular UI components.',
-    role: 'iOS Developer · Konnecs Infotech',
-    tags: [
-      'iOS',
-      'Swift',
-      'Media Feeds',
-      'Image/Video Uploads',
-      'Caching',
-      'Lazy Loading',
-      'Social Networking',
-    ],
-  },
-];
-
-export const EDUCATION = [
-  {
-    degree: 'B.Tech, Computer Science & Engineering',
-    institution: 'N.C. College of Engineering, Israna, Panipat',
-    duration: '2013 - 2016',
-    details:
-      'Graduated with a focus on data structures, algorithms, and software engineering principles, laying the foundation for my career in development.',
-  },
-  {
-    degree: 'Diploma, Computer Engineering',
-    institution: 'Govt. Polytechnic, Nilokheri, Karnal',
-    duration: '2010 - 2013',
-    details:
-      'Gained early hands-on experience and fundamental knowledge in computer hardware, networking, and programming.',
-  },
-];
-
-export const CONTACT_DETAILS = {
-  email: SOCIAL_LINKS.email,
-  phone: SOCIAL_LINKS.phone,
-  location: 'Gurugram, Haryana, India',
-  whatsapp: SOCIAL_LINKS.whatsapp,
-  linkedin: SOCIAL_LINKS.linkedin,
-  medium: SOCIAL_LINKS.medium,
-};
+]

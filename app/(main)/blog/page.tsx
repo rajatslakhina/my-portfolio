@@ -1,125 +1,149 @@
-// app/(main)/blog/page.tsx
-import type { Metadata } from "next";
-import Link from "next/link";
-import { BLOG_CATEGORIES } from "@/constants";
-import { getBlogPostsByCategory } from "@/lib/github-blog";
-import { CyberBadge } from "@/components/ui/cyber-badge";
-import { Calendar, Clock, ArrowRight, BookOpen, ExternalLink } from "lucide-react";
+import Link from "next/link"
+import { BookOpen } from "lucide-react"
+import { getAllPosts, type Post } from "@/lib/posts"
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Technical articles on AI, mobile development, iOS and software engineering.",
-};
+async function getGithubPosts(): Promise<Post[]> {
+  try {
+    const token = process.env.GITHUB_TOKEN
+    const repo  = process.env.GITHUB_BLOG_REPO ?? "rajatslakhina/AI-Knowledge"
+    const headers: Record<string, string> = { Accept: "application/vnd.github.v3+json" }
+    if (token) headers.Authorization = `Bearer ${token}`
 
-const COLOR_VARIANTS: Record<string, { bar: string; badge: string; label: string; glow: string }> = {
-  primary:   { bar: "from-primary to-secondary",   badge: "primary",   label: "text-primary",   glow: "hover:shadow-[0_0_40px_hsl(var(--primary)/0.12)]"   },
-  secondary: { bar: "from-secondary to-accent",    badge: "secondary", label: "text-secondary", glow: "hover:shadow-[0_0_40px_hsl(var(--secondary)/0.12)]" },
-  accent:    { bar: "from-accent to-primary",      badge: "accent",    label: "text-accent",    glow: "hover:shadow-[0_0_40px_hsl(var(--accent)/0.12)]"    },
-};
+    // Try common repo paths in order until we find markdown files
+    const candidatePaths = ["posts", "articles", "blog", ""]
+    let mdFiles: { name: string; download_url: string }[] = []
+
+    for (const path of candidatePaths) {
+      const url = `https://api.github.com/repos/${repo}/contents${path ? `/${path}` : ""}`
+      const res = await fetch(url, { headers, next: { revalidate: 3600 } })
+      if (!res.ok) continue
+      const data = await res.json() as { name: string; download_url: string; type: string }[]
+      if (!Array.isArray(data)) continue
+      const found = data.filter(f => f.type === "file" && f.name.endsWith(".md"))
+      if (found.length > 0) { mdFiles = found; break }
+    }
+
+    if (mdFiles.length === 0) return []
+
+    // Fetch each file's content to extract real H1 title and first paragraph
+    const posts = await Promise.all(
+      mdFiles.slice(0, 12).map(async (f) => {
+        const base = f.name.replace(/\.md$/, "")
+        const parts = base.split("--")
+        let category: string, slug: string
+        if (parts.length >= 2) {
+          category = parts[0]
+          slug = parts.slice(1).join("--")
+        } else {
+          category = "ai"
+          slug = base
+        }
+
+        let title = slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        let excerpt = ""
+        let readTime = "5 min read"
+
+        try {
+          const raw = await fetch(f.download_url, { next: { revalidate: 3600 } })
+          if (raw.ok) {
+            const text = await raw.text()
+            const h1 = text.match(/^#\s+(.+)$/m)
+            if (h1) title = h1[1].trim()
+            const words = text.split(/\s+/).length
+            readTime = `${Math.max(1, Math.round(words / 200))} min read`
+            const lines = text.split("\n")
+            for (const line of lines) {
+              const t = line.trim()
+              if (t && !t.startsWith("#") && !t.startsWith("!") && !t.startsWith(">") && !t.startsWith("```") && t.length > 40) {
+                excerpt = t.replace(/[*_`[\]]/g, "").slice(0, 200)
+                break
+              }
+            }
+          }
+        } catch { /* keep filename-derived values */ }
+
+        return { slug, category, title, date: "", readTime, excerpt, content: "" }
+      })
+    )
+
+    return posts
+  } catch {
+    return []
+  }
+}
 
 export default async function BlogPage() {
-  const sections = await Promise.all(
-    BLOG_CATEGORIES.map(async (cat) => ({
-      cat,
-      posts: await getBlogPostsByCategory(cat),
-    }))
-  );
+  const [githubPosts, staticPosts] = await Promise.all([
+    getGithubPosts(),
+    Promise.resolve(getAllPosts()),
+  ])
+
+  // Merge: GitHub posts first (deduplicate by slug against static)
+  const staticSlugs = new Set(staticPosts.map(p => p.slug))
+  const merged = [
+    ...githubPosts.filter(p => !staticSlugs.has(p.slug)),
+    ...staticPosts,
+  ]
 
   return (
-    <section className="py-24 sm:py-32">
-      {/* Header */}
-      <div className="mb-20 flex flex-col items-center gap-2">
-        <span className="font-mono-accent text-xs font-semibold uppercase tracking-[0.25em] text-primary">
-          {"{/* writing */}"}
-        </span>
-        <h1 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Knowledge{" "}
-          <span className="text-gradient font-serif italic">Hub</span>
-        </h1>
-        <p className="mt-3 max-w-xl text-center text-muted-foreground">
-          Curated articles across different domains — each section powered by a dedicated GitHub repo.
-        </p>
-      </div>
+    <div className="relative min-h-screen py-24">
+      <div className="absolute inset-0 bg-grid-fine pointer-events-none opacity-30" />
+      <div className="relative z-10 container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
 
-      {/* Category sections */}
-      {sections.map(({ cat, posts }, catIdx) => {
-        const v = COLOR_VARIANTS[cat.color] ?? COLOR_VARIANTS.primary;
-
-        return (
-          <div key={cat.slug} className={catIdx > 0 ? "mt-24" : ""}>
-            {/* Section header */}
-            <div className="mb-10 flex items-center gap-4">
-              <span className="text-3xl">{cat.emoji}</span>
-              <div>
-                <h2 className={`text-2xl font-extrabold ${v.label}`}>{cat.label}</h2>
-                <p className="mt-0.5 text-sm text-muted-foreground">{cat.description}</p>
-              </div>
-              <div className="ml-auto flex items-center gap-3">
-                <a
-                  href={`https://github.com/${cat.owner}/${cat.repo}`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono-accent text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  {cat.owner}/{cat.repo}
-                </a>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className={`mb-8 h-px bg-gradient-to-r ${v.bar} opacity-30`} />
-
-            {posts.length === 0 ? (
-              <div className="flex items-center gap-3 rounded-xl border border-dashed border-border py-12 text-center justify-center text-muted-foreground">
-                <BookOpen className="h-5 w-5 opacity-40" />
-                <span className="text-sm">No posts found in this repo yet.</span>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {posts.map((post) => (
-                  <Link
-                    key={post.slug}
-                    href={`/blog/${cat.slug}/${post.slug}`}
-                    className={`group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-card/60 backdrop-blur-xl transition-all duration-300 hover:border-primary/30 ${v.glow} hover:-translate-y-1`}
-                  >
-                    <div className={`h-1 w-full bg-gradient-to-r ${v.bar}`} />
-                    <div className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-12deg] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent transition-none group-hover:animate-shine" />
-
-                    <div className="flex flex-1 flex-col p-5">
-                      <div className="mb-3 flex flex-wrap gap-1.5">
-                        {post.tags.slice(0, 3).map((tag) => (
-                          <CyberBadge key={tag} label={tag} variant={v.badge as "primary" | "secondary" | "accent" | "muted"} />
-                        ))}
-                      </div>
-                      <h3 className="mb-2 text-base font-bold leading-snug text-foreground transition-colors group-hover:text-primary line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="mb-4 flex-1 text-xs leading-relaxed text-muted-foreground line-clamp-3">
-                        {post.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="flex items-center gap-1 font-mono-accent text-[10px] text-muted-foreground">
-                          <Calendar className="h-2.5 w-2.5" />
-                          {new Date(post.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <span className="flex items-center gap-1 font-mono-accent text-[10px] text-muted-foreground">
-                            <Clock className="h-2.5 w-2.5" />
-                            {post.readingTime} min
-                          </span>
-                          <ArrowRight className="h-3.5 w-3.5 text-primary opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
+        {/* Header */}
+        <div className="mb-10 flex items-center gap-3">
+          <div
+            className="flex items-center gap-2 border border-primary/25 bg-primary/8 px-3 py-1"
+            style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+          >
+            <BookOpen className="h-3 w-3 text-primary" />
+            <span className="font-mono-accent text-[10px] tracking-[0.22em] text-primary uppercase font-semibold">
+              blog.feed
+            </span>
           </div>
-        );
-      })}
-    </section>
-  );
+          <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-primary/40 to-transparent" />
+        </div>
+
+        <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+          AI &amp;{" "}
+          <span className="text-gradient">Engineering</span>{" "}
+          Blog
+        </h1>
+        <p className="mb-12 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Thoughts on AI-first development, iOS architecture, building mobile platforms,
+          and growing as a tech leader.
+        </p>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {merged.map(post => (
+            <Link
+              key={`${post.category}-${post.slug}`}
+              href={`/blog/${post.category}/${post.slug}`}
+              className="glass-card group flex flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30"
+            >
+              <p className="mb-2 font-mono-accent text-[10px] uppercase tracking-widest text-primary/60">
+                {post.category}
+              </p>
+              <h2 className="mb-3 text-base font-bold leading-snug text-foreground group-hover:text-primary transition-colors">
+                {post.title}
+              </h2>
+              {post.excerpt && (
+                <p className="flex-1 text-xs leading-relaxed text-muted-foreground line-clamp-3">
+                  {post.excerpt}
+                </p>
+              )}
+              <div className="mt-4 flex items-center justify-between">
+                {post.date && (
+                  <span className="font-mono-accent text-[10px] text-muted-foreground">{post.date}</span>
+                )}
+                <span className="font-mono-accent text-[10px] text-primary/60 ml-auto">{post.readTime}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }

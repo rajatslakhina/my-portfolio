@@ -1,403 +1,376 @@
 "use client";
-import { PROJECTS } from "@/constants";
-import SectionWrapper from "../shared/SectionWrapper";
-import { Button } from "@/components/ui/button";
-import { CyberBadge } from "@/components/ui/cyber-badge";
+import { useState, useRef } from "react";
+import Link from "next/link";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { FolderOpen, ExternalLink, ArrowRight } from "lucide-react";
 import { TiltCard } from "@/components/ui/tilt-card";
-import { Github, ExternalLink, FolderOpen, Star, Radio, Filter, ChevronRight } from "lucide-react";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-import React, { useState, useMemo } from "react";
+import { cn } from "@/lib/utils";
 
-interface ProjectsSectionProps { limit?: number; }
+/* ── Types ── */
+type Domain = "all" | "fintech" | "real-estate" | "social" | "messaging" | "fmcg";
 
-type Project = (typeof PROJECTS)[number];
-
-const ACCENT = [
-  "hsl(186 100% 50%)",
-  "hsl(275 100% 60%)",
-  "hsl(335 100% 50%)",
-  "hsl(186 100% 50%)",
-  "hsl(275 100% 60%)",
-  "hsl(335 100% 50%)",
-] as const;
-
-/* ─── Build tag filter list from all projects ─── */
-const ALL_TAGS = ["All", "iOS", "SwiftUI", "React Native", "Architecture", "Security"];
-
-/* ─── Stats for the header ─── */
-const STATS = [
-  { value: String(PROJECTS.length), label: "Projects",  color: "hsl(186 100% 50%)" },
-  { value: String(PROJECTS.filter(p => p.live).length), label: "Live Apps", color: "hsl(275 100% 60%)" },
-  { value: "3",                     label: "Companies", color: "hsl(335 100% 50%)" },
-];
-
-export default function ProjectsSection({ limit }: ProjectsSectionProps) {
-  const reduced = useReducedMotion();
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
-  const sourceProjects = limit ? PROJECTS.slice(0, limit) : PROJECTS;
-
-  const filtered = useMemo(() => {
-    if (activeFilter === "All") return sourceProjects;
-    return sourceProjects.filter(p =>
-      p.tags.some(t => t.toLowerCase().includes(activeFilter.toLowerCase()))
-    );
-  }, [activeFilter, sourceProjects]);
-
-  const [featured, ...rest] = filtered;
-
-  return (
-    <SectionWrapper id="projects">
-
-      {/* ─── Header ─── */}
-      <motion.div className="mb-12 flex flex-col items-center gap-3"
-        initial={reduced ? false : { opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-      >
-        <div className="relative flex items-center gap-2 border border-primary/30 bg-primary/8 px-4 py-1.5"
-          style={{ clipPath: "polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))" }}
-        >
-          <span className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary" />
-          <FolderOpen className="h-3 w-3 text-primary" />
-          <span className="font-mono-accent text-[10px] text-primary uppercase tracking-[0.3em]">03 / projects.log</span>
-        </div>
-        <h2 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
-          My Work &amp; <span className="text-gradient font-serif italic">Projects</span>
-        </h2>
-        <div className="flex items-center gap-3">
-          <div className="h-px w-16 bg-gradient-to-r from-transparent to-primary/50" />
-          <span className="text-primary/30 text-xs">◆</span>
-          <div className="h-px w-16 bg-gradient-to-l from-transparent to-primary/50" />
-        </div>
-      </motion.div>
-
-      {/* ─── Stats row ─── */}
-      <motion.div className="mb-10 flex flex-wrap justify-center gap-6 sm:gap-12"
-        initial={reduced ? false : { opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        {STATS.map(({ value, label, color }) => (
-          <div key={label} className="flex flex-col items-center gap-1">
-            <span className="font-mono-accent text-3xl font-black tabular-nums"
-              style={{ color, textShadow: `0 0 16px ${color}50` }}>{value}</span>
-            <span className="font-mono-accent text-[9px] uppercase tracking-widest text-muted-foreground/70">{label}</span>
-          </div>
-        ))}
-      </motion.div>
-
-      {/* ─── Filter tabs ─── */}
-      {!limit && (
-        <motion.div className="mb-8 flex flex-wrap justify-center gap-2"
-          initial={reduced ? false : { opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          <span className="self-center mr-1 font-mono-accent text-[9px] text-muted-foreground/50 uppercase tracking-widest flex items-center gap-1">
-            <Filter className="h-3 w-3" />Filter
-          </span>
-          {ALL_TAGS.map(tag => {
-            const isActive = activeFilter === tag;
-            return (
-              <motion.button key={tag} onClick={() => setActiveFilter(tag)}
-                whileHover={reduced ? undefined : { scale: 1.05 }}
-                whileTap={reduced ? undefined : { scale: 0.96 }}
-                className="relative overflow-hidden font-mono-accent text-[10px] uppercase tracking-widest px-3.5 py-1.5 transition-all duration-200"
-                style={{
-                  clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))",
-                  border: `1px solid ${isActive ? "hsl(186 100% 50%)" : "hsl(186 100% 50% / 0.2)"}`,
-                  background: isActive ? "hsl(186 100% 50% / 0.15)" : "transparent",
-                  color: isActive ? "hsl(186 100% 50%)" : "hsl(220 10% 55%)",
-                  boxShadow: isActive ? "0 0 16px hsl(186 100% 50% / 0.2)" : "none",
-                }}
-              >
-                {isActive && (
-                  <motion.span layoutId="proj-filter-bg" className="absolute inset-0"
-                    style={{ background: "hsl(186 100% 50% / 0.08)" }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-                <span className="relative">{tag}</span>
-              </motion.button>
-            );
-          })}
-          {activeFilter !== "All" && (
-            <motion.span className="self-center font-mono-accent text-[9px] text-muted-foreground/50"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              · {filtered.length} result{filtered.length !== 1 ? "s" : ""}
-            </motion.span>
-          )}
-        </motion.div>
-      )}
-
-      <AnimatePresence mode="wait">
-        <motion.div key={activeFilter}
-          initial={reduced ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={reduced ? undefined : { opacity: 0 }}
-          transition={{ duration: 0.15 }}
-        >
-          {/* ─── Featured project (full width) ─── */}
-          {featured && (
-            <motion.div className="mb-5"
-              initial={reduced ? false : { opacity: 0, y: 32, filter: "blur(6px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <TiltCard intensity={4}
-                className="group relative overflow-hidden bg-card/70 backdrop-blur-xl transition-all duration-300"
-                style={{
-                  clipPath: "polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))",
-                  border: `1px solid ${ACCENT[0]}30`,
-                } as React.CSSProperties}
-              >
-                {/* BG gradient */}
-                <div className="absolute inset-0 opacity-50 group-hover:opacity-90 transition-opacity duration-500"
-                  style={{ background: `linear-gradient(135deg, ${ACCENT[0]}10 0%, transparent 50%, ${ACCENT[1]}08 100%)` }} />
-
-                {/* Scan line */}
-                <div className="absolute inset-x-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(90deg, transparent, ${ACCENT[0]}80, transparent)`, top: "50%" }} />
-
-                {/* Corner accents — all 4, large */}
-                <span className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 z-10 transition-all duration-300 group-hover:w-8 group-hover:h-8"
-                  style={{ borderColor: ACCENT[0] }} />
-                <span className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 z-10 opacity-50"
-                  style={{ borderColor: ACCENT[0] }} />
-                <span className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 z-10 transition-all duration-300 group-hover:w-8 group-hover:h-8"
-                  style={{ borderColor: ACCENT[0] }} />
-                <span className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 z-10 opacity-50"
-                  style={{ borderColor: ACCENT[0] }} />
-
-                {/* Shine */}
-                <div className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-12deg] bg-gradient-to-r from-transparent via-white/[0.05] to-transparent transition-none group-hover:animate-shine" />
-
-                {/* Top accent bar */}
-                <div className="absolute top-0 left-0 right-0 h-0.5"
-                  style={{ background: `linear-gradient(90deg, ${ACCENT[0]}, ${ACCENT[1]}, ${ACCENT[2]})` }} />
-
-                <div className="relative z-10 grid grid-cols-1 gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_auto]">
-                  <div>
-                    {/* Featured badge + index */}
-                    <div className="mb-4 flex items-center gap-3">
-                      <span className="flex items-center gap-1.5 font-mono-accent text-[9px] uppercase tracking-widest border px-2.5 py-1"
-                        style={{
-                          borderColor: ACCENT[0] + "60", color: ACCENT[0], background: ACCENT[0] + "15",
-                          clipPath: "polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px))",
-                          boxShadow: `0 0 12px ${ACCENT[0]}30`,
-                        }}
-                      >
-                        <Star className="h-3 w-3" fill="currentColor" /> Featured Project
-                      </span>
-                      {featured.live && (
-                        <span className="flex items-center gap-1.5 font-mono-accent text-[9px] uppercase tracking-widest"
-                          style={{ color: "hsl(142 72% 50%)" }}>
-                          <span className="h-1.5 w-1.5 rounded-full bg-[hsl(142_72%_50%)] animate-pulse" />
-                          Live
-                        </span>
-                      )}
-                      <span className="ml-auto font-mono-accent text-[10px]" style={{ color: ACCENT[0] + "40" }}>001</span>
-                    </div>
-
-                    <h3 className="text-2xl font-black tracking-tight sm:text-3xl"
-                      style={{ color: ACCENT[0], textShadow: `0 0 24px ${ACCENT[0]}40` }}>
-                      {featured.title}
-                    </h3>
-                    {"role" in featured && (
-                      <p className="mt-1 font-mono-accent text-[10px] uppercase tracking-widest" style={{ color: ACCENT[0] + "70" }}>
-                        {(featured as { role?: string }).role}
-                      </p>
-                    )}
-                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground max-w-2xl border-l-2 pl-4"
-                      style={{ borderColor: ACCENT[0] + "40" }}>
-                      {featured.description}
-                    </p>
-
-                    <div className="mt-5 flex flex-wrap gap-1.5">
-                      {featured.tags.map((tag) => (
-                        <CyberBadge key={tag} label={tag} variant="primary" />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* CTA column */}
-                  <div className="flex flex-row gap-3 lg:flex-col lg:items-end lg:justify-center">
-                    {featured.link && (
-                      <Button variant="outline" asChild
-                        className="border-primary/30 font-mono-accent text-[10px] tracking-widest uppercase hover:border-primary hover:bg-primary/10 transition-all duration-200"
-                        style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
-                      >
-                        <a href={featured.link} target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4" /> Source
-                        </a>
-                      </Button>
-                    )}
-                    {featured.live && (
-                      <Button asChild
-                        className="bg-gradient-neon font-mono-accent text-[10px] tracking-widest uppercase font-bold text-black hover:opacity-90 shadow-neon-primary transition-all duration-200"
-                        style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
-                      >
-                        <a href={featured.live} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="mr-2 h-4 w-4" /> App Store
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </TiltCard>
-            </motion.div>
-          )}
-
-          {/* ─── Grid of remaining projects ─── */}
-          {rest.length > 0 && (
-            <motion.div
-              className="grid grid-cols-1 gap-4 md:grid-cols-2"
-              variants={reduced ? undefined : { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-              initial={reduced ? false : "hidden"}
-              whileInView="visible" viewport={{ once: true }}
-            >
-              {rest.map((project, i) => {
-                const idx = i + 1; // offset because featured is 0
-                const color = ACCENT[idx % ACCENT.length];
-                return (
-                  <ProjectCard
-                    key={project.title}
-                    project={project}
-                    index={idx}
-                    color={color}
-                    reduced={!!reduced}
-                    isHovered={hoveredIdx === idx}
-                    onHover={() => setHoveredIdx(idx)}
-                    onLeave={() => setHoveredIdx(null)}
-                  />
-                );
-              })}
-            </motion.div>
-          )}
-
-          {/* Empty state */}
-          {filtered.length === 0 && (
-            <motion.div className="py-20 text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p className="font-mono-accent text-sm text-muted-foreground/60">
-                No projects match <span className="text-primary">{activeFilter}</span> · Try another filter
-              </p>
-            </motion.div>
-          )}
-        </motion.div>
-      </AnimatePresence>
-    </SectionWrapper>
-  );
+interface Project {
+  title: string;
+  client: string;
+  company: string;
+  domain: Exclude<Domain, "all">;
+  description: string;
+  tags: string[];
+  liveUrl?: string;
+  color: "primary" | "secondary" | "accent";
 }
 
-/* ─── Individual project card ─── */
-function ProjectCard({
-  project, index, color, reduced, isHovered, onHover, onLeave
-}: {
-  project: Project; index: number; color: string; reduced: boolean;
-  isHovered: boolean; onHover: () => void; onLeave: () => void;
-}) {
+/* ── Domain meta ── */
+const DOMAIN_META: Record<Domain, string> = {
+  all:            "All",
+  fintech:        "Fintech",
+  "real-estate":  "Real Estate",
+  social:         "Social",
+  messaging:      "Messaging",
+  fmcg:           "FMCG",
+};
+
+const FILTER_DOMAINS: Domain[] = ["all", "fintech", "real-estate", "social", "messaging", "fmcg"];
+
+/* ── Real project data from resume ── */
+const PROJECTS: Project[] = [
+  {
+    title: "REA Real Estate",
+    client: "realestate.com.au",
+    company: "ThoughtWorks",
+    domain: "real-estate",
+    description:
+      "Led end-to-end SwiftUI architecture for Australia's #1 property platform. Built property discovery, interactive map clustering, and real-time listing updates — driving a 15% increase in user engagement.",
+    tags: ["SwiftUI", "Maps", "CoreData", "Swift"],
+    liveUrl: "https://apps.apple.com/au/app/realestate-com-au-property/id404667893",
+    color: "secondary",
+  },
+  {
+    title: "TeleMessage",
+    client: "TeleMessage Inc.",
+    company: "ThoughtWorks",
+    domain: "messaging",
+    description:
+      "Security App Expert on Signal-based enterprise messaging platform. Achieved 15% improvement in data protection through security automation and built an automated multi-repo code merge system.",
+    tags: ["Swift", "Signal Protocol", "Security", "CI/CD"],
+    liveUrl: "https://apps.apple.com/us/app/tm-tlgrm/id1630122033",
+    color: "accent",
+  },
+  {
+    title: "PepsiCo Super App",
+    client: "PepsiCo",
+    company: "ThoughtWorks",
+    domain: "fmcg",
+    description:
+      "Solution Architect for PepsiCo's FMCG super app. Designed scalable modular frameworks covering multi-brand product catalogues, distributor workflows, and field sales operations.",
+    tags: ["Swift", "Solution Architecture", "Modular", "FMCG"],
+    color: "primary",
+  },
+  {
+    title: "Khulke",
+    client: "Khulke",
+    company: "DTC Infotech",
+    domain: "social",
+    description:
+      "Technical Lead for social networking platform with live streaming. Modularized Meeting and Live Streaming into independent frameworks. UIKit-to-SwiftUI migration delivered $500K business value with async/await concurrency.",
+    tags: ["SwiftUI", "UIKit", "WebRTC", "async/await"],
+    liveUrl: "https://apps.apple.com/in/app/khul-ke-social-networking-app/id1590836834",
+    color: "secondary",
+  },
+  {
+    title: "SC Next Gen Banking",
+    client: "Standard Chartered",
+    company: "Mobile Programming LLC",
+    domain: "fintech",
+    description:
+      "Lead & Mentor on next-generation banking app for Singapore. Optimised profile, daily banking, and wealth modules — driving a 35% improvement in usability and task completion rates.",
+    tags: ["Swift", "UIKit", "MVVM", "Banking"],
+    liveUrl: "https://apps.apple.com/sg/app/sc-mobile-singapore/id367337298",
+    color: "primary",
+  },
+  {
+    title: "Airtel Payment Bank",
+    client: "Airtel",
+    company: "HCL Technologies",
+    domain: "fintech",
+    description:
+      "Senior developer on Airtel's payments and banking super app. Delivered $500K in performance gains via SwiftUI migration. Architected Onboarding, IRCTC, Home, and Insurance modules with modern concurrency.",
+    tags: ["SwiftUI", "Payments", "async/await", "UIKit"],
+    liveUrl: "https://apps.apple.com/in/app/airtel-thanks-recharge-bank/id543184334",
+    color: "primary",
+  },
+];
+
+/* ── Color maps ── */
+const COLOR_BORDER: Record<Project["color"], string> = {
+  primary:   "border-primary/12",
+  secondary: "border-secondary/12",
+  accent:    "border-accent/12",
+};
+const COLOR_GRAD: Record<Project["color"], string> = {
+  primary:   "from-primary/10 to-secondary/6",
+  secondary: "from-secondary/10 to-primary/6",
+  accent:    "from-accent/10 to-secondary/6",
+};
+const COLOR_BRACKET: Record<Project["color"], string> = {
+  primary:   "border-primary",
+  secondary: "border-secondary",
+  accent:    "border-accent",
+};
+const COLOR_TAG: Record<Project["color"], string> = {
+  primary:   "border-primary/20 bg-primary/8 text-primary/80",
+  secondary: "border-secondary/20 bg-secondary/8 text-secondary/80",
+  accent:    "border-accent/20 bg-accent/8 text-accent/80",
+};
+const COLOR_INDEX: Record<Project["color"], string> = {
+  primary:   "text-primary/22",
+  secondary: "text-secondary/22",
+  accent:    "text-accent/22",
+};
+const COLOR_TITLE: Record<Project["color"], string> = {
+  primary:   "group-hover:text-primary",
+  secondary: "group-hover:text-secondary",
+  accent:    "group-hover:text-accent",
+};
+const COLOR_BTN: Record<Project["color"], string> = {
+  primary:   "text-primary border-primary/30 hover:bg-primary/10 hover:border-primary/60",
+  secondary: "text-secondary border-secondary/30 hover:bg-secondary/10 hover:border-secondary/60",
+  accent:    "text-accent border-accent/30 hover:bg-accent/10 hover:border-accent/60",
+};
+const COLOR_CLIENT: Record<Project["color"], string> = {
+  primary:   "text-primary/55",
+  secondary: "text-secondary/55",
+  accent:    "text-accent/55",
+};
+const DOMAIN_PILL: Record<Exclude<Domain, "all">, string> = {
+  fintech:        "border-primary/30 bg-primary/8 text-primary/75",
+  "real-estate":  "border-secondary/30 bg-secondary/8 text-secondary/75",
+  social:         "border-secondary/30 bg-secondary/8 text-secondary/75",
+  messaging:      "border-accent/30 bg-accent/8 text-accent/75",
+  fmcg:           "border-primary/30 bg-primary/8 text-primary/75",
+};
+
+/* ── Animation variants ── */
+const fadeUp = {
+  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
+  show:   { opacity: 1, y: 0,  filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+/* ── Project Card ── */
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const indexStr = String(index + 1).padStart(3, "0");
+
   return (
-    <motion.div
-      variants={reduced ? undefined : {
-        hidden: { opacity: 0, y: 28, filter: "blur(4px)" },
-        visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-      }}
-    >
-      <TiltCard intensity={6}
-        className="group relative flex h-full flex-col overflow-hidden bg-card/70 backdrop-blur-xl transition-all duration-300"
-        style={{
-          clipPath: "polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))",
-          border: `1px solid ${color}22`,
-        } as React.CSSProperties}
-        // @ts-expect-error -- onMouseEnter/Leave on TiltCard div
-        onMouseEnter={onHover} onMouseLeave={onLeave}
+    <div className="group h-full">
+      <TiltCard
+        intensity={7}
+        className={cn(
+          "relative h-full border bg-card/50 backdrop-blur-sm overflow-hidden",
+          "transition-all duration-350 hover:shadow-card-hover",
+          COLOR_BORDER[project.color],
+        )}
+        style={{ clipPath: "polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))" }}
       >
-        {/* BG gradient */}
-        <div className="absolute inset-0 opacity-40 group-hover:opacity-90 transition-opacity duration-400"
-          style={{ background: `linear-gradient(135deg, ${color}0d, transparent 55%)` }} />
-
-        {/* Hover border glow */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ boxShadow: `inset 0 0 30px ${color}08` }} />
-
-        {/* Top accent line */}
-        <div className="absolute top-0 left-0 right-0 h-px"
-          style={{ background: `linear-gradient(90deg, transparent, ${color}60, transparent)` }} />
-
-        {/* Corners — main 2 + faint 2 */}
-        <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 z-10 transition-all duration-300 group-hover:w-5 group-hover:h-5"
-          style={{ borderColor: color }} />
-        <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 z-10 transition-all duration-300 group-hover:w-5 group-hover:h-5"
-          style={{ borderColor: color }} />
-        <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r z-10 opacity-30" style={{ borderColor: color }} />
-        <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l z-10 opacity-30" style={{ borderColor: color }} />
-
+        {/* Gradient bg */}
+        <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-400 group-hover:opacity-100 pointer-events-none", COLOR_GRAD[project.color])} />
         {/* Shine sweep */}
-        <div className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-12deg] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent transition-none group-hover:animate-shine" />
+        <span className="absolute inset-0 -translate-x-full skew-x-[-12deg] bg-white/[0.04] transition-none group-hover:animate-shine pointer-events-none z-10" />
+        {/* HUD corner accents */}
+        <span className={cn("absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 opacity-40 transition-opacity duration-300 group-hover:opacity-100", COLOR_BRACKET[project.color])} />
+        <span className={cn("absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 opacity-0 transition-opacity duration-300 group-hover:opacity-70", COLOR_BRACKET[project.color])} />
+        <span className={cn("absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 opacity-0 transition-opacity duration-300 group-hover:opacity-70", COLOR_BRACKET[project.color])} />
+        <span className={cn("absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 opacity-40 transition-opacity duration-300 group-hover:opacity-100", COLOR_BRACKET[project.color])} />
 
-        {/* Index + live badge */}
-        <div className="absolute top-3 right-4 z-10 flex items-center gap-2">
-          {project.live && (
-            <span className="flex items-center gap-1 font-mono-accent text-[8px] uppercase tracking-wider"
-              style={{ color: "hsl(142 72% 50%)" }}>
-              <Radio className="h-2.5 w-2.5" />Live
-            </span>
-          )}
-          <span className="font-mono-accent text-[10px]" style={{ color: color + "40" }}>
-            {String(index + 1).padStart(3, "0")}
+        <div className="relative z-20 flex h-full flex-col p-6">
+          {/* Index */}
+          <span className={cn("absolute top-4 right-5 font-mono-accent text-[11px] font-black tracking-[0.2em]", COLOR_INDEX[project.color])}>
+            {indexStr}
           </span>
-        </div>
 
-        <div className="relative z-10 flex flex-1 flex-col p-5">
-          <h3 className="text-lg font-bold tracking-tight leading-tight pr-16 mb-1"
-            style={{ color, textShadow: isHovered ? `0 0 16px ${color}40` : "none" }}>
+          {/* Domain + company row */}
+          <div className="mb-3 flex items-center gap-2 flex-wrap">
+            <span
+              className={cn("border font-mono-accent text-[8px] uppercase tracking-widest px-2 py-0.5", DOMAIN_PILL[project.domain])}
+              style={{ clipPath: "polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,4px 100%,0 calc(100% - 4px))" }}
+            >
+              {DOMAIN_META[project.domain]}
+            </span>
+            <span className="font-mono-accent text-[9px] text-muted-foreground/45 uppercase tracking-wider">
+              {project.company}
+            </span>
+          </div>
+
+          {/* Client name */}
+          <p className={cn("mb-1 font-mono-accent text-[10px] uppercase tracking-widest", COLOR_CLIENT[project.color])}>
+            {project.client}
+          </p>
+
+          {/* Title */}
+          <h3 className={cn("mb-3 pr-8 font-mono-accent text-base font-bold leading-snug text-foreground transition-colors duration-300", COLOR_TITLE[project.color])}>
             {project.title}
           </h3>
-          {"role" in project && (
-            <p className="font-mono-accent text-[9px] uppercase tracking-widest mb-3" style={{ color: color + "70" }}>
-              {(project as { role?: string }).role}
-            </p>
-          )}
 
-          <p className="text-xs leading-relaxed text-muted-foreground flex-1 mb-4 group-hover:text-muted-foreground/90 transition-colors duration-200">
+          {/* Description */}
+          <p className="mb-4 flex-1 text-[13px] leading-relaxed text-muted-foreground">
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-1.5 mb-5">
-            {project.tags.slice(0, 4).map((tag) => (
-              <CyberBadge key={tag} label={tag} variant="primary" />
+          {/* Tags */}
+          <div className="mb-4 flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className={cn("border font-mono-accent text-[9px] uppercase tracking-widest px-2 py-0.5", COLOR_TAG[project.color])}
+                style={{ clipPath: "polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,4px 100%,0 calc(100% - 4px))" }}
+              >
+                {tag}
+              </span>
             ))}
-            {project.tags.length > 4 && (
-              <CyberBadge label={`+${project.tags.length - 4}`} variant="muted" />
-            )}
           </div>
 
-          <div className="flex items-center gap-2 mt-auto">
-            {project.link && (
-              <Button variant="outline" size="sm" asChild
-                className="border-primary/20 font-mono-accent text-[10px] tracking-widest uppercase hover:border-primary hover:bg-primary/10 transition-all duration-200"
-                style={{ clipPath: "polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px))" }}
-              >
-                <a href={project.link} target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-1.5 h-3.5 w-3.5" /> Code
-                </a>
-              </Button>
-            )}
-            {project.live && (
-              <Button size="sm" asChild
-                className="bg-gradient-neon font-mono-accent text-[10px] tracking-widest uppercase font-bold text-black hover:opacity-90 shadow-neon-primary transition-all duration-200"
-                style={{ clipPath: "polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px))" }}
-              >
-                <a href={project.live} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-1.5 h-3.5 w-3.5" /> Store
-                </a>
-              </Button>
-            )}
-            <ChevronRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-1"
-              style={{ color }} />
-          </div>
+          {/* App Store link */}
+          {project.liveUrl ? (
+            <Link
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View ${project.title} on App Store`}
+              className={cn(
+                "flex items-center gap-1.5 border font-mono-accent text-[10px] uppercase tracking-wider px-3 py-1.5 w-fit",
+                "transition-all duration-200 hover:scale-[1.04]",
+                COLOR_BTN[project.color],
+              )}
+              style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+            >
+              <ExternalLink className="h-3 w-3" />
+              App Store
+            </Link>
+          ) : (
+            <div className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary/40 animate-pulse" />
+              <span className="font-mono-accent text-[9px] text-muted-foreground/40 uppercase tracking-wider">Internal</span>
+            </div>
+          )}
         </div>
       </TiltCard>
-    </motion.div>
+    </div>
+  );
+}
+
+/* ── Main section ── */
+export default function ProjectsSection() {
+  const ref    = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [active, setActive] = useState<Domain>("all");
+
+  const filtered = active === "all" ? PROJECTS : PROJECTS.filter(p => p.domain === active);
+
+  return (
+    <section id="projects" ref={ref} className="relative py-24 overflow-hidden">
+      <div className="absolute inset-0 bg-grid-fine pointer-events-none opacity-30" />
+
+      <motion.div
+        className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+        initial="hidden"
+        animate={inView ? "show" : "hidden"}
+      >
+        {/* Section label */}
+        <motion.div variants={fadeUp} className="mb-10 flex items-center gap-3">
+          <div
+            className="flex items-center gap-2 border border-primary/25 bg-primary/8 px-3 py-1"
+            style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+          >
+            <FolderOpen className="h-3 w-3 text-primary" />
+            <span className="font-mono-accent text-[10px] tracking-[0.22em] text-primary uppercase font-semibold">
+              03 / projects.log
+            </span>
+          </div>
+          <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-primary/40 to-transparent" />
+        </motion.div>
+
+        {/* Heading */}
+        <motion.h2
+          variants={fadeUp}
+          className="mb-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+        >
+          Selected{" "}
+          <span className="text-gradient">Work</span>
+        </motion.h2>
+
+        <motion.p variants={fadeUp} className="mb-8 max-w-xl text-sm text-muted-foreground leading-relaxed">
+          Live products shipped across fintech, real estate, social, and enterprise messaging.
+        </motion.p>
+
+        {/* Domain filter */}
+        <motion.div variants={fadeUp} className="mb-10 flex flex-wrap gap-2">
+          {FILTER_DOMAINS.map((domain) => {
+            const count = domain === "all"
+              ? PROJECTS.length
+              : PROJECTS.filter(p => p.domain === domain).length;
+            const isActive = active === domain;
+            return (
+              <button
+                key={domain}
+                onClick={() => setActive(domain)}
+                className={cn(
+                  "relative flex items-center gap-2 px-3.5 py-1.5 font-mono-accent text-[10px] uppercase tracking-widest border overflow-hidden transition-all duration-200",
+                  isActive
+                    ? "border-primary/50 bg-primary/15 text-primary shadow-neon-primary"
+                    : "border-primary/15 bg-transparent text-muted-foreground hover:border-primary/30 hover:text-foreground",
+                )}
+                style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+              >
+                {isActive && (
+                  <span className="absolute inset-0 -translate-x-full skew-x-[-12deg] bg-white/10 animate-shine pointer-events-none" />
+                )}
+                {DOMAIN_META[domain]}
+                <span
+                  className={cn(
+                    "font-mono-accent text-[8px] min-w-[16px] text-center leading-none px-1 py-0.5 transition-colors duration-200",
+                    isActive ? "bg-primary/30 text-primary" : "bg-white/5 text-muted-foreground/60",
+                  )}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* Animated project grid */}
+        <motion.div layout className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((project, i) => (
+              <motion.div
+                key={project.title}
+                layout
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.88 }}
+                transition={{ duration: 0.22, delay: i * 0.05 }}
+              >
+                <ProjectCard project={project} index={i} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div variants={fadeUp} className="mt-12 flex justify-center">
+          <Link
+            href="/contact"
+            className="group relative flex items-center gap-2.5 border border-primary/30 bg-primary/8 px-6 py-3 font-mono-accent text-xs uppercase tracking-widest text-primary transition-all duration-300 hover:border-primary hover:bg-primary/14 hover:shadow-neon-primary overflow-hidden"
+            style={{ clipPath: "polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))" }}
+          >
+            <span className="absolute inset-0 -translate-x-full skew-x-[-12deg] bg-white/10 transition-none group-hover:animate-shine pointer-events-none" />
+            <span className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary" />
+            <span className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary" />
+            Work Together
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
+      </motion.div>
+    </section>
   );
 }
