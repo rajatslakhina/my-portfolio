@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { FileText, X, Download, ExternalLink } from "lucide-react";
+import { FileText, X, Download, ExternalLink, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ResumeViewerProps {
@@ -34,8 +34,9 @@ export default function ResumeViewer({ trigger, className }: ResumeViewerProps) 
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-[96vw] max-w-4xl h-[90vh] translate-x-[-50%] translate-y-[-50%] flex flex-col border border-primary/20 bg-card shadow-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95">
+          
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-primary/15 px-4 py-3 bg-card/80">
+          <div className="flex items-center justify-between border-b border-primary/15 px-4 py-3 bg-card/80 shrink-0">
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4 text-primary" />
               <span className="font-mono-accent text-xs text-primary uppercase tracking-widest">resume.pdf</span>
@@ -63,34 +64,100 @@ export default function ResumeViewer({ trigger, className }: ResumeViewerProps) 
               </Dialog.Close>
             </div>
           </div>
-          {/* PDF viewer — object/embed has better cross-browser support than iframe */}
-          <object
-            data="/resume.pdf#toolbar=1&view=FitH"
-            type="application/pdf"
-            className="flex-1 w-full"
-            aria-label="Rajat Lakhina Resume"
-          >
-            <embed
-              src="/resume.pdf#toolbar=1&view=FitH"
-              type="application/pdf"
-              className="w-full h-full"
-            />
-            {/* Last-resort fallback */}
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10 text-center">
-              <p className="font-mono-accent text-sm text-muted-foreground">
-                Your browser can&apos;t preview PDFs inline.
-              </p>
-              <a
-                href="/resume.pdf"
-                download="RajatLakhina_CV.pdf"
-                className="font-mono-accent text-xs uppercase tracking-widest text-primary border border-primary/40 px-4 py-2 hover:bg-primary/10 transition-colors"
-              >
-                Download CV instead
-              </a>
-            </div>
-          </object>
+
+          {/* PDF viewer */}
+          <PdfViewer open={open} />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+/** Fetches PDF as a blob URL — bypasses X-Frame-Options / CSP frame restrictions */
+function PdfViewer({ open }: { open: boolean }) {
+  const [blobUrl, setBlobUrl]   = useState<string | null>(null);
+  const [loading, setLoading]   = useState(false);
+  const [error,   setError]     = useState(false);
+  const urlRef                  = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    setLoading(true);
+    setError(false);
+
+    fetch("/resume.pdf")
+      .then(res => {
+        if (!res.ok) throw new Error("fetch failed");
+        return res.blob();
+      })
+      .then(blob => {
+        // Revoke previous blob URL to avoid memory leaks
+        if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+        const url = URL.createObjectURL(blob);
+        urlRef.current = url;
+        setBlobUrl(url);
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+
+    return () => {
+      if (urlRef.current) {
+        URL.revokeObjectURL(urlRef.current);
+        urlRef.current = null;
+      }
+      setBlobUrl(null);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-1 items-center justify-center gap-3 text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+        <span className="font-mono-accent text-[10px] uppercase tracking-widest">Loading CV...</span>
+      </div>
+    );
+  }
+
+  if (error || !blobUrl) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-5 p-10 text-center">
+        <FileText className="h-8 w-8 text-muted-foreground/30" />
+        <div>
+          <p className="font-mono-accent text-xs font-semibold text-muted-foreground">Preview unavailable</p>
+          <p className="mt-1 font-mono-accent text-[10px] text-muted-foreground/50">Use Download or Open to view the CV</p>
+        </div>
+        <div className="flex gap-3">
+          <a
+            href="/resume.pdf"
+            download="RajatLakhina_CV.pdf"
+            className="flex items-center gap-2 border border-primary/40 bg-primary/10 px-4 py-2 font-mono-accent text-[10px] uppercase tracking-widest text-primary hover:bg-primary/20 transition-colors"
+            style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+          >
+            <Download className="h-3 w-3" />
+            Download CV
+          </a>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 border border-white/10 px-4 py-2 font-mono-accent text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-white/20 transition-colors"
+            style={{ clipPath: "polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))" }}
+          >
+            <ExternalLink className="h-3 w-3" />
+            Open in Tab
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <iframe
+      src={blobUrl}
+      className="flex-1 w-full border-0"
+      title="Rajat Lakhina Resume"
+    />
   );
 }
